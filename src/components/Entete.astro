@@ -29,11 +29,20 @@ const chemin = Astro.url.pathname.replace(/\/$/, "") || "/";
 </header>
 
 <style>
+  /* En haut de page, l'en-tête se fond dans le décor ; dès qu'on fait défiler,
+     il prend un fond légèrement flouté et son trait de séparation apparaît. */
   .entete {
     position: sticky; top: 0; z-index: 40;
-    background: color-mix(in srgb, var(--sable) 92%, transparent);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--trait);
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background-color .3s ease, border-color .3s ease, backdrop-filter .3s ease;
+  }
+  .entete.defile,
+  .entete:has(.menu.ouvert) {
+    background: color-mix(in srgb, var(--sable) 90%, transparent);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-bottom-color: var(--trait);
   }
   .barre { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 76px; }
   .marque { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--brun); }
@@ -81,6 +90,11 @@ const chemin = Astro.url.pathname.replace(/\/$/, "") || "/";
 </style>
 
 <script>
+  const entete = document.querySelector<HTMLElement>(".entete");
+  const majDefilement = () => entete?.classList.toggle("defile", window.scrollY > 8);
+  majDefilement();
+  window.addEventListener("scroll", majDefilement, { passive: true });
+
   const bouton = document.querySelector<HTMLButtonElement>(".bascule");
   const menu = document.getElementById("menu-principal");
   bouton?.addEventListener("click", () => {

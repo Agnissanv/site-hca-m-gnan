@@ -59,6 +59,15 @@ const chemin = Astro.url.pathname.replace(/\/$/, "") || "/";
   /* Bouton de l'en-tête plus compact que ceux du contenu */
   .menu .bouton { padding: 11px 18px 11px 15px; font-size: 0.95rem; gap: 9px; }
 
+  /* Page qui s'ouvre sur une photo (accueil) : en-tête en clair tant qu'on n'a pas défilé */
+  .marque, .nom-secondaire, .menu ul a { transition: color .3s ease; }
+  :global(body.avec-photo) .entete:not(.defile):not(:has(.menu.ouvert)) .marque,
+  :global(body.avec-photo) .entete:not(.defile):not(:has(.menu.ouvert)) .menu ul a { color: var(--papier); }
+  :global(body.avec-photo) .entete:not(.defile):not(:has(.menu.ouvert)) .menu ul a:hover { color: var(--soleil); }
+  :global(body.avec-photo) .entete:not(.defile):not(:has(.menu.ouvert)) .nom-secondaire { color: var(--sable-fonce); }
+  :global(body.avec-photo) .entete:not(.defile):not(:has(.menu.ouvert)) .menu .bouton { background: var(--sable); color: var(--ebene); }
+  :global(body.avec-photo) .entete:not(.defile):not(:has(.menu.ouvert)) .menu .bouton:hover { background: var(--papier); color: var(--ebene); }
+
   .bascule { display: none; }
 
   @media (max-width: 900px) {

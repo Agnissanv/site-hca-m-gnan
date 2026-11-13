@@ -14,9 +14,12 @@ interface Props {
   titre: string;
   description: string;
   indexer?: boolean;
+  /** La page s'ouvre sur une grande photo : l'en-tête transparent passe en clair tant qu'on n'a pas défilé. */
+  heroPhoto?: boolean;
 }
-const { titre, description, indexer = true } = Astro.props;
-const titreComplet = Astro.url.pathname === "/" ? `${cabinet.nom} · Cabinet comptable à Abidjan` : `${titre} · ${cabinet.nom}`;
+const { titre, description, indexer = true, heroPhoto = false } = Astro.props;
+const estAccueil = Astro.url.pathname.replace(/\/$/, "") === lien("/").replace(/\/$/, "");
+const titreComplet = estAccueil ?`${cabinet.nom} · Cabinet comptable à Abidjan` : `${titre} · ${cabinet.nom}`;
 const canonique = new URL(Astro.url.pathname, Astro.site);
 // Aperçu (GitHub Pages, etc.) : jamais indexé par les moteurs de recherche.
 const apercu = !(Astro.site?.hostname ?? "").endsWith("horizoncomptable.com");
@@ -51,8 +54,9 @@ const donneesStructurees = {
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(lien("/img/logo-hca.jpg"), Astro.site)} />
     <script type="application/ld+json" set:html={JSON.stringify(donneesStructurees)} />
+    {heroPhoto && <link rel="preconnect" href="https://images.unsplash.com" />}
   </head>
-  <body>
+  <body class={heroPhoto ? "avec-photo" : undefined}>
     <a class="visuellement-cache" href="#contenu">Aller au contenu</a>
     <Entete />
     <main id="contenu">

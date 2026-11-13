@@ -51,6 +51,18 @@ const rayons = Array.from({ length: 9 }, (_, i) => {
     <strong>Une entreprise en règle, qui avance.</strong>
   </figcaption>
 </figure>
+<script is:inline>
+  // Les animations (soleil, ratures, coches) attendent que le compte en T entre à l'écran.
+  (function () {
+    var compte = document.currentScript && document.currentScript.previousElementSibling;
+    if (!compte || !("IntersectionObserver" in window)) return;
+    compte.classList.add("en-attente");
+    var observateur = new IntersectionObserver(function (entrees) {
+      if (entrees[0].isIntersecting) { compte.classList.remove("en-attente"); observateur.disconnect(); }
+    }, { threshold: 0.3 });
+    observateur.observe(compte);
+  })();
+</script>
 
 <style>
   .compte { margin: 0; position: relative; }
@@ -100,6 +112,11 @@ const rayons = Array.from({ length: 9 }, (_, i) => {
     margin-top: 0; padding: 16px clamp(14px, 3vw, 36px);
   }
   .solde strong { font: 720 clamp(1.25rem, 2.4vw, 1.7rem)/1.2 var(--f-display); font-stretch: 88%; }
+
+  .compte.en-attente .soleil,
+  .compte.en-attente .rayons,
+  .compte.en-attente .barre,
+  .compte.en-attente .coche path { animation-play-state: paused; }
 
   @media (prefers-reduced-motion: reduce) {
     .barre { background-size: 100% 1.5px; }

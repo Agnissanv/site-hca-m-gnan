@@ -17,6 +17,7 @@
   --f-texte: "Source Serif 4 Variable", Georgia, serif;
   --f-mono: "IBM Plex Mono", ui-monospace, monospace;
 
+  --hauteur-entete: 77px;  /* barre de 76px + trait de 1px */
   --largeur: 1180px;
   --gouttiere: clamp(16px, 4vw, 40px);
   --rayon: 10px;

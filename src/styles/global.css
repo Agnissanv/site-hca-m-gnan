@@ -93,20 +93,10 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 }
 .bouton:active { transform: translateY(1px); }
 
-/* Bouton principal : brun ébène, avec le petit soleil du logo qui se lève au survol */
-.bouton-plein { background: var(--ebene); color: var(--sable); padding-left: 20px; }
-.bouton-plein::before {
-  content: ""; flex: none;
-  width: 14px; height: 7px; border-radius: 14px 14px 0 0;
-  background: var(--soleil);
-  box-shadow: 0 1.5px 0 0 var(--soleil);
-  transform: translateY(1px);
-  transition: transform .3s cubic-bezier(.2,.7,.2,1);
-}
+/* Bouton principal : brun ébène, sobre */
+.bouton-plein { background: var(--ebene); color: var(--sable); }
 .bouton-plein:hover { background: var(--brun); color: var(--papier); }
-.bouton-plein:hover::before { transform: translateY(-2px); }
 .bande-sombre .bouton-plein { background: var(--soleil); color: var(--ebene); }
-.bande-sombre .bouton-plein::before { background: var(--ebene); box-shadow: 0 1.5px 0 0 var(--ebene); }
 .bande-sombre .bouton-plein:hover { background: #F0B547; color: var(--ebene); }
 
 .bouton-contour { border-color: var(--ebene); color: var(--ebene); background: transparent; }

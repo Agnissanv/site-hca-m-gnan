@@ -29,21 +29,24 @@ const chemin = Astro.url.pathname.replace(/\/$/, "") || "/";
 </header>
 
 <style>
-  /* En haut de page, l'en-tête se fond dans le décor ; dès qu'on fait défiler,
-     il prend un fond légèrement flouté et son trait de séparation apparaît. */
+  /* En haut de page, l'en-tête se fond dans le décor. Au défilement, son fond, son flou,
+     son ombre et son trait apparaissent en fondu progressif, au rythme du doigt ou de la molette :
+     --p va de 0 (haut de page) à 1 (après 120 px), calculé par le script plus bas. */
   .entete {
+    --p: 0;
     position: sticky; top: 0; z-index: 40;
-    background: transparent;
-    border-bottom: 1px solid transparent;
-    transition: background-color .3s ease, border-color .3s ease, backdrop-filter .3s ease;
+    isolation: isolate;
   }
-  .entete.defile,
-  .entete:has(.menu.ouvert) {
-    background: color-mix(in srgb, var(--sable) 90%, transparent);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    border-bottom-color: var(--trait);
+  .entete::before,
+  .entete::after { content: ""; position: absolute; left: 0; right: 0; pointer-events: none; opacity: var(--p); }
+  .entete::before {
+    top: 0; bottom: 0; z-index: -1;
+    background: color-mix(in srgb, var(--sable) 88%, transparent);
+    -webkit-backdrop-filter: blur(14px) saturate(1.15);
+    backdrop-filter: blur(14px) saturate(1.15);
+    box-shadow: 0 12px 32px -20px rgba(36, 24, 15, 0.45);
   }
+  .entete::after { bottom: 0; height: 1px; background: var(--trait); }
   .barre { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 76px; }
   .marque { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--brun); }
   .marque img { width: 58px; height: auto; }
@@ -57,16 +60,22 @@ const chemin = Astro.url.pathname.replace(/\/$/, "") || "/";
   .menu ul a[aria-current="page"] { border-color: var(--soleil); }
   .menu ul a:hover { color: var(--olive); }
   /* Bouton de l'en-tête plus compact que ceux du contenu */
-  .menu .bouton { padding: 11px 18px 11px 15px; font-size: 0.95rem; gap: 9px; }
+  .menu .bouton { padding: 11px 20px; font-size: 0.95rem; }
 
-  /* Page qui s'ouvre sur une photo (accueil) : en-tête en clair tant qu'on n'a pas défilé */
-  .marque, .nom-secondaire, .menu ul a { transition: color .3s ease; }
-  :global(body.avec-photo) .entete:not(.defile):not(:has(.menu.ouvert)) .marque,
-  :global(body.avec-photo) .entete:not(.defile):not(:has(.menu.ouvert)) .menu ul a { color: var(--papier); }
-  :global(body.avec-photo) .entete:not(.defile):not(:has(.menu.ouvert)) .menu ul a:hover { color: var(--soleil); }
-  :global(body.avec-photo) .entete:not(.defile):not(:has(.menu.ouvert)) .nom-secondaire { color: var(--sable-fonce); }
-  :global(body.avec-photo) .entete:not(.defile):not(:has(.menu.ouvert)) .menu .bouton { background: var(--sable); color: var(--ebene); }
-  :global(body.avec-photo) .entete:not(.defile):not(:has(.menu.ouvert)) .menu .bouton:hover { background: var(--papier); color: var(--ebene); }
+  /* Page qui s'ouvre sur une photo (accueil) : les couleurs glissent en continu du clair (sur la photo)
+     au foncé (sur le fond sable), en suivant --p ; pas de bascule brutale. */
+  :global(body.avec-photo) .entete .marque { color: color-mix(in srgb, var(--brun) calc(var(--p) * 100%), var(--papier)); }
+  :global(body.avec-photo) .entete .nom-secondaire { color: color-mix(in srgb, var(--ebene) calc(var(--p) * 100%), var(--sable-fonce)); }
+  :global(body.avec-photo) .entete .menu ul a { color: color-mix(in srgb, var(--ebene) calc(var(--p) * 100%), var(--papier)); }
+  :global(body.avec-photo) .entete .menu ul a:hover { color: color-mix(in srgb, var(--olive) calc(var(--p) * 100%), var(--soleil)); }
+  :global(body.avec-photo) .entete .menu .bouton {
+    background: color-mix(in srgb, var(--ebene) calc(var(--p) * 100%), var(--sable));
+    color: color-mix(in srgb, var(--sable) calc(var(--p) * 100%), var(--ebene));
+  }
+  :global(body.avec-photo) .entete .menu .bouton:hover {
+    background: color-mix(in srgb, var(--brun) calc(var(--p) * 100%), var(--papier));
+    color: color-mix(in srgb, var(--papier) calc(var(--p) * 100%), var(--ebene));
+  }
 
   .bascule { display: none; }
 
@@ -102,15 +111,27 @@ const chemin = Astro.url.pathname.replace(/\/$/, "") || "/";
 
 <script>
   const entete = document.querySelector<HTMLElement>(".entete");
-  const majDefilement = () => entete?.classList.toggle("defile", window.scrollY > 8);
-  majDefilement();
-  window.addEventListener("scroll", majDefilement, { passive: true });
-
   const bouton = document.querySelector<HTMLButtonElement>(".bascule");
   const menu = document.getElementById("menu-principal");
+  const DISTANCE_FONDU = 120; // px de défilement pour que l'en-tête soit entièrement opaque
+
+  // Progression du fondu (0 → 1), recalculée au plus une fois par image affichée.
+  let enAttente = false;
+  function majEntete() {
+    enAttente = false;
+    const p = menu?.classList.contains("ouvert") ? 1 : Math.min(1, Math.max(0, window.scrollY / DISTANCE_FONDU));
+    entete?.style.setProperty("--p", p.toFixed(3));
+    entete?.classList.toggle("defile", p > 0.5);
+  }
+  window.addEventListener("scroll", () => {
+    if (!enAttente) { enAttente = true; requestAnimationFrame(majEntete); }
+  }, { passive: true });
+  majEntete();
+
   bouton?.addEventListener("click", () => {
     const ouvert = bouton.getAttribute("aria-expanded") === "true";
     bouton.setAttribute("aria-expanded", String(!ouvert));
     menu?.classList.toggle("ouvert", !ouvert);
+    majEntete();
   });
 </script>

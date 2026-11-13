@@ -1,6 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
-import { cabinet, lienWhatsApp } from "../config";
+import { cabinet, lienWhatsApp, lien } from "../config";
 ---
 <Base
   titre="Contact et rendez-vous"
@@ -79,7 +79,7 @@ import { cabinet, lienWhatsApp } from "../config";
 
         <label class="accord">
           <input type="checkbox" name="accord" required />
-          <span>J'accepte que ces informations soient utilisées pour répondre à ma demande (voir la <a href="/mentions-legales#donnees">politique de confidentialité</a>).</span>
+          <span>J'accepte que ces informations soient utilisées pour répondre à ma demande (voir la <a href={lien("/mentions-legales#donnees")}>politique de confidentialité</a>).</span>
         </label>
 
         <p class="etat" role="status" aria-live="polite"></p>
@@ -166,7 +166,7 @@ import { cabinet, lienWhatsApp } from "../config";
     }
     envoyer.disabled = true;
     try {
-      const r = await fetch("/api/contact", { method: "POST", body: new FormData(form) });
+      const r = await fetch(`${import.meta.env.BASE_URL.replace(/\/$/, "")}/api/contact`, { method: "POST", body: new FormData(form) });
       if (!r.ok) throw new Error(String(r.status));
       etat.classList.add("info");
       etat.textContent = "Demande envoyée. Le cabinet vous répond rapidement, par téléphone ou par e-mail.";

@@ -1,11 +1,11 @@
 ---
-import { navigation } from "../config";
+import { navigation, lien } from "../config";
 const chemin = Astro.url.pathname.replace(/\/$/, "") || "/";
 ---
 <header class="entete">
   <div class="conteneur barre">
-    <a class="marque" href="/" aria-label="Horizon Comptable Afrique, accueil">
-      <img src="/img/embleme-hca.png" alt="" width="58" height="48" />
+    <a class="marque" href={lien("/")} aria-label="Horizon Comptable Afrique, accueil">
+      <img src={lien("/img/embleme-hca.png")} alt="" width="58" height="48" />
       <span class="nom">
         <span class="nom-principal">Horizon</span>
         <span class="nom-secondaire">Comptable Afrique</span>
@@ -20,10 +20,10 @@ const chemin = Astro.url.pathname.replace(/\/$/, "") || "/";
     <nav id="menu-principal" class="menu" aria-label="Navigation principale">
       <ul>
         {navigation.map((l) => (
-          <li><a href={l.href} aria-current={chemin === l.href ? "page" : undefined}>{l.label}</a></li>
+          <li><a href={lien(l.href)} aria-current={chemin === (lien(l.href).replace(/\/$/, "") || "/") ? "page" : undefined}>{l.label}</a></li>
         ))}
       </ul>
-      <a class="bouton bouton-plein" href="/contact#rendez-vous">Prendre rendez-vous</a>
+      <a class="bouton bouton-plein" href={lien("/contact#rendez-vous")}>Prendre rendez-vous</a>
     </nav>
   </div>
 </header>

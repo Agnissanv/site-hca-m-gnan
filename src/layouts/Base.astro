@@ -8,7 +8,7 @@ import "../styles/global.css";
 import Entete from "../components/Entete.astro";
 import Pied from "../components/Pied.astro";
 import Assistant from "../components/Assistant.astro";
-import { cabinet } from "../config";
+import { cabinet, lien } from "../config";
 
 interface Props {
   titre: string;
@@ -18,6 +18,8 @@ interface Props {
 const { titre, description, indexer = true } = Astro.props;
 const titreComplet = Astro.url.pathname === "/" ? `${cabinet.nom} · Cabinet comptable à Abidjan` : `${titre} · ${cabinet.nom}`;
 const canonique = new URL(Astro.url.pathname, Astro.site);
+// Aperçu (GitHub Pages, etc.) : jamais indexé par les moteurs de recherche.
+const apercu = !(Astro.site?.hostname ?? "").endsWith("horizoncomptable.com");
 
 const donneesStructurees = {
   "@context": "https://schema.org",
@@ -40,14 +42,14 @@ const donneesStructurees = {
     <title>{titreComplet}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonique} />
-    {!indexer && <meta name="robots" content="noindex" />}
+    {(!indexer || apercu) && <meta name="robots" content="noindex, nofollow" />}
     <meta name="theme-color" content="#F2E6CF" />
-    <link rel="icon" type="image/png" href="/img/embleme-hca.png" />
+    <link rel="icon" type="image/png" href={lien("/img/embleme-hca.png")} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="fr_CI" />
     <meta property="og:title" content={titreComplet} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL("/img/logo-hca.jpg", Astro.site)} />
+    <meta property="og:image" content={new URL(lien("/img/logo-hca.jpg"), Astro.site)} />
     <script type="application/ld+json" set:html={JSON.stringify(donneesStructurees)} />
   </head>
   <body>

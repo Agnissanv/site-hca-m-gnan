@@ -1,4 +1,5 @@
 ---
+import { lien } from "../config";
 import Base from "../layouts/Base.astro";
 
 // Texte d'ambition et objectifs fournis par M. Gnan (13/11/2026).
@@ -67,8 +68,8 @@ const equipe = [
     <div class="conteneur suite">
       <h2 id="titre-suite">Faisons connaissance.</h2>
       <div class="actions">
-        <a class="bouton bouton-plein" href="/contact#rendez-vous">Prendre rendez-vous</a>
-        <a class="bouton bouton-contour" href="/services">Voir nos services</a>
+        <a class="bouton bouton-plein" href={lien("/contact#rendez-vous")}>Prendre rendez-vous</a>
+        <a class="bouton bouton-contour" href={lien("/services")}>Voir nos services</a>
       </div>
     </div>
   </section>

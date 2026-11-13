@@ -1,4 +1,5 @@
 ---
+import { lien } from "../config";
 import Base from "../layouts/Base.astro";
 // Page prévue au contrat, masquée du menu et du référencement tant qu'aucun vrai témoignage
 // (recueilli avec l'accord du client) n'est disponible. Aucun témoignage inventé.
@@ -10,7 +11,7 @@ import Base from "../layouts/Base.astro";
       <h1>Les avis de nos clients arrivent.</h1>
       <p class="chapeau">Vous êtes accompagné par le cabinet ? Racontez-nous votre expérience : avec votre accord, nous la publierons ici.</p>
       <div class="actions">
-        <a class="bouton bouton-plein" href="/contact">Partager mon expérience</a>
+        <a class="bouton bouton-plein" href={lien("/contact")}>Partager mon expérience</a>
       </div>
     </div>
   </section>

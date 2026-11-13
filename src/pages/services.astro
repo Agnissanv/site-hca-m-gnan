@@ -1,6 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
-import { lienWhatsApp } from "../config";
+import { lienWhatsApp, lien } from "../config";
 
 const services = [
   {
@@ -71,7 +71,7 @@ const services = [
         <h2 id="titre-appel">Dites-nous où vous en êtes.</h2>
       </div>
       <div class="actions">
-        <a class="bouton bouton-soleil" href="/contact#rendez-vous">Prendre rendez-vous</a>
+        <a class="bouton bouton-soleil" href={lien("/contact#rendez-vous")}>Prendre rendez-vous</a>
         <a class="bouton bouton-contour" href={lienWhatsApp()} target="_blank" rel="noopener">Écrire sur WhatsApp</a>
       </div>
     </div>

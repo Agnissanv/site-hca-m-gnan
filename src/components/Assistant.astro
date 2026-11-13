@@ -108,7 +108,7 @@ import { lienWhatsApp } from "../config";
 
   async function chargerBase(): Promise<Base> {
     if (base) return base;
-    const r = await fetch("/assistant/kb.json");
+    const r = await fetch(`${import.meta.env.BASE_URL.replace(/\/$/, "")}/assistant/kb.json`);
     base = (await r.json()) as Base;
     sujets.replaceChildren(...base.entrees.map((e) => {
       const b = document.createElement("button");
@@ -129,7 +129,7 @@ import { lienWhatsApp } from "../config";
     bulle.append(p);
     if (action) {
       const a = document.createElement("a");
-      a.href = action.lien;
+      a.href = action.lien.startsWith("/") ? `${import.meta.env.BASE_URL.replace(/\/$/, "")}${action.lien}` : action.lien;
       a.textContent = `${action.libelle} →`;
       bulle.append(a);
     }
@@ -155,7 +155,7 @@ import { lienWhatsApp } from "../config";
     const controle = new AbortController();
     const minuterie = setTimeout(() => controle.abort(), 9000);
     try {
-      const r = await fetch("/api/assistant", {
+      const r = await fetch(`${import.meta.env.BASE_URL.replace(/\/$/, "")}/api/assistant`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question, historique: historique.slice(-6) }),

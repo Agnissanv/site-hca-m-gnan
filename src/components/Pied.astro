@@ -1,12 +1,12 @@
 ---
-import { cabinet, navigation, lienWhatsApp } from "../config";
+import { cabinet, navigation, lienWhatsApp, lien } from "../config";
 const annee = new Date().getFullYear();
 ---
 <footer class="pied">
   <div class="conteneur grille">
     <div class="identite">
       <div class="marque">
-        <img src="/img/embleme-hca.png" alt="" width="64" height="53" />
+        <img src={lien("/img/embleme-hca.png")} alt="" width="64" height="53" />
         <div>
           <p class="nom">Horizon Comptable Afrique</p>
           <p class="sous">Votre partenaire de confiance en comptabilité</p>
@@ -27,8 +27,8 @@ const annee = new Date().getFullYear();
     <div>
       <p class="etiquette">Le site</p>
       <ul>
-        {navigation.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
-        <li><a href="/mentions-legales">Mentions légales</a></li>
+        {navigation.map((l) => <li><a href={lien(l.href)}>{l.label}</a></li>)}
+        <li><a href={lien("/mentions-legales")}>Mentions légales</a></li>
       </ul>
     </div>
 

@@ -18,9 +18,8 @@ import { cabinet, lienWhatsApp, lien } from "../config";
     <div class="conteneur contact">
       <aside class="moyens" aria-label="Nous joindre directement">
         <div class="moyen">
-          <p class="etiquette">Le plus rapide</p>
-          <a class="bouton bouton-plein" href={lienWhatsApp()} target="_blank" rel="noopener">Écrire sur WhatsApp</a>
-          <p class:list={["detail", { provisoire: cabinet.numeroProvisoire }]}>{cabinet.telephone}</p>
+          <p class="etiquette">WhatsApp et téléphone</p>
+          <p><a class:list={["detail", { provisoire: cabinet.numeroProvisoire }]} href={lienWhatsApp()} target="_blank" rel="noopener">{cabinet.telephone}</a></p>
         </div>
         <div class="moyen">
           <p class="etiquette">Par e-mail</p>
@@ -95,7 +94,7 @@ import { cabinet, lienWhatsApp, lien } from "../config";
   .moyen { border-top: 3px solid var(--ebene); padding-top: 16px; }
   .moyen .etiquette { margin-bottom: 12px; }
   .moyen p { margin: 0; }
-  .detail { margin-top: 12px !important; font: 500 0.95rem/1 var(--f-mono); display: inline-block; }
+  .detail { font: 500 1rem/1.4 var(--f-mono); display: inline-block; margin-top: 12px; }
 
   .formulaire { background: var(--papier); border-radius: 16px; padding: clamp(22px, 4vw, 40px); display: grid; gap: 22px; }
   .type { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 10px; }

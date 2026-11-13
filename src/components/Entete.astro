@@ -56,6 +56,8 @@ const chemin = Astro.url.pathname.replace(/\/$/, "") || "/";
   .menu ul a { font: 560 1rem/1 var(--f-display); text-decoration: none; padding: 8px 0; border-bottom: 2px solid transparent; }
   .menu ul a[aria-current="page"] { border-color: var(--soleil); }
   .menu ul a:hover { color: var(--olive); }
+  /* Bouton de l'en-tête plus compact que ceux du contenu */
+  .menu .bouton { padding: 11px 18px 11px 15px; font-size: 0.95rem; gap: 9px; }
 
   .bascule { display: none; }
 

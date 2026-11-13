@@ -1,7 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import CompteEnT from "../components/CompteEnT.astro";
-import { lienWhatsApp, lien } from "../config";
+import { lien } from "../config";
 
 const services = [
   { titre: "Comptabilité et fiscalité", texte: "Tenue de votre comptabilité selon le SYSCOHADA, états financiers annuels et déclarations fiscales." },
@@ -40,10 +40,6 @@ const questions = [
         </div>
         <div class="hero-droite">
           <p class="chapeau">Comptabilité conforme au SYSCOHADA, déclarations fiscales et sociales, paie, conseil financier : nous accompagnons les PME et les entrepreneurs de Côte d'Ivoire pour qu'ils se consacrent à leur activité.</p>
-          <div class="actions">
-            <a class="bouton bouton-plein" href={lien("/contact#rendez-vous")}>Prendre rendez-vous</a>
-            <a class="bouton bouton-contour" href={lienWhatsApp()} target="_blank" rel="noopener">Écrire sur WhatsApp</a>
-          </div>
         </div>
       </div>
       <CompteEnT />
@@ -124,7 +120,6 @@ const questions = [
         <p class="chapeau">Un rendez-vous, un appel ou un message : dites-nous où vous en êtes, nous vous dirons comment avancer.</p>
         <div class="actions">
           <a class="bouton bouton-plein" href={lien("/contact#rendez-vous")}>Prendre rendez-vous</a>
-          <a class="bouton bouton-contour" href={lienWhatsApp()} target="_blank" rel="noopener">Écrire sur WhatsApp</a>
         </div>
       </div>
     </div>
@@ -139,7 +134,7 @@ const questions = [
   }
   .hero-texte .etiquette { margin-bottom: 18px; }
   .hero h1 { max-width: 12ch; }
-  .hero-droite .chapeau { margin-bottom: 26px; }
+  .hero-droite .chapeau { margin-bottom: 0; }
 
   .services { list-style: none; margin: 0 0 36px; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 3px solid var(--ebene); }
   .services li { padding: 26px 26px 22px 0; border-bottom: 1px solid var(--trait); }

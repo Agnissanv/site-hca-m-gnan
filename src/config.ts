@@ -29,7 +29,7 @@ export const cabinet = {
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 export const lien = (chemin: string) => (/^(https?:|mailto:|tel:|#)/.test(chemin) ? chemin : `${BASE}${chemin}`);
 
-export const lienWhatsApp =(message = "Bonjour, je souhaite échanger avec le cabinet Horizon Comptable Afrique.") =>
+export const lienWhatsApp = (message = "Bonjour, je souhaite échanger avec le cabinet Horizon Comptable Afrique.") =>
   `https://wa.me/${cabinet.whatsapp}?text=${encodeURIComponent(message)}`;
 
 export const navigation = [

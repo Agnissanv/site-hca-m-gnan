@@ -80,18 +80,34 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 
 /* Boutons */
 .bouton {
-  display: inline-flex; align-items: center; gap: 10px;
-  font: 620 1rem/1 var(--f-display);
-  padding: 15px 22px;
-  border-radius: var(--rayon);
-  border: 2px solid transparent;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  font: 600 1rem/1 var(--f-display);
+  letter-spacing: 0.005em;
+  padding: 15px 24px;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
   text-decoration: none;
   cursor: pointer;
-  transition: background-color .2s, color .2s, border-color .2s, transform .2s;
+  transition: background-color .25s, color .25s, border-color .25s, transform .2s;
 }
 .bouton:active { transform: translateY(1px); }
-.bouton-plein { background: var(--olive); color: var(--papier); }
-.bouton-plein:hover { background: var(--olive-fonce); color: var(--papier); }
+
+/* Bouton principal : brun ébène, avec le petit soleil du logo qui se lève au survol */
+.bouton-plein { background: var(--ebene); color: var(--sable); padding-left: 20px; }
+.bouton-plein::before {
+  content: ""; flex: none;
+  width: 14px; height: 7px; border-radius: 14px 14px 0 0;
+  background: var(--soleil);
+  box-shadow: 0 1.5px 0 0 var(--soleil);
+  transform: translateY(1px);
+  transition: transform .3s cubic-bezier(.2,.7,.2,1);
+}
+.bouton-plein:hover { background: var(--brun); color: var(--papier); }
+.bouton-plein:hover::before { transform: translateY(-2px); }
+.bande-sombre .bouton-plein { background: var(--soleil); color: var(--ebene); }
+.bande-sombre .bouton-plein::before { background: var(--ebene); box-shadow: 0 1.5px 0 0 var(--ebene); }
+.bande-sombre .bouton-plein:hover { background: #F0B547; color: var(--ebene); }
+
 .bouton-contour { border-color: var(--ebene); color: var(--ebene); background: transparent; }
 .bouton-contour:hover { background: var(--ebene); color: var(--sable); }
 .bande-sombre .bouton-contour { border-color: var(--sable); color: var(--sable); }
@@ -109,7 +125,7 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 }
 .provisoire::after {
   content: "à confirmer";
-  position: absolute; top: -10px; right: -6px;
+  position: absolute; top: -17px; right: -6px;
   font: 500 0.6rem/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase;
   background: var(--soleil); color: var(--ebene);
   padding: 3px 5px; border-radius: 3px;

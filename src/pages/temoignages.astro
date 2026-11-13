@@ -1,0 +1,17 @@
+---
+import Base from "../layouts/Base.astro";
+// Page prévue au contrat, masquée du menu et du référencement tant qu'aucun vrai témoignage
+// (recueilli avec l'accord du client) n'est disponible. Aucun témoignage inventé.
+---
+<Base titre="Témoignages" description="Ce que les clients du cabinet Horizon Comptable Afrique disent de leur accompagnement." indexer={false}>
+  <section class="page-tete">
+    <div class="conteneur">
+      <p class="etiquette">Témoignages</p>
+      <h1>Les avis de nos clients arrivent.</h1>
+      <p class="chapeau">Vous êtes accompagné par le cabinet ? Racontez-nous votre expérience : avec votre accord, nous la publierons ici.</p>
+      <div class="actions">
+        <a class="bouton bouton-plein" href="/contact">Partager mon expérience</a>
+      </div>
+    </div>
+  </section>
+</Base>

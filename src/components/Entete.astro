@@ -1,0 +1,91 @@
+---
+import { navigation } from "../config";
+const chemin = Astro.url.pathname.replace(/\/$/, "") || "/";
+---
+<header class="entete">
+  <div class="conteneur barre">
+    <a class="marque" href="/" aria-label="Horizon Comptable Afrique, accueil">
+      <img src="/img/embleme-hca.png" alt="" width="58" height="48" />
+      <span class="nom">
+        <span class="nom-principal">Horizon</span>
+        <span class="nom-secondaire">Comptable Afrique</span>
+      </span>
+    </a>
+
+    <button class="bascule" type="button" aria-expanded="false" aria-controls="menu-principal">
+      <span class="visuellement-cache">Ouvrir le menu</span>
+      <span class="trait-menu" aria-hidden="true"></span>
+    </button>
+
+    <nav id="menu-principal" class="menu" aria-label="Navigation principale">
+      <ul>
+        {navigation.map((l) => (
+          <li><a href={l.href} aria-current={chemin === l.href ? "page" : undefined}>{l.label}</a></li>
+        ))}
+      </ul>
+      <a class="bouton bouton-plein" href="/contact#rendez-vous">Prendre rendez-vous</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .entete {
+    position: sticky; top: 0; z-index: 40;
+    background: color-mix(in srgb, var(--sable) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--trait);
+  }
+  .barre { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 76px; }
+  .marque { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--brun); }
+  .marque img { width: 58px; height: auto; }
+  .nom { display: grid; line-height: 1; }
+  .nom-principal { font: 780 1.45rem/1 var(--f-display); font-stretch: 82%; letter-spacing: 0.06em; text-transform: uppercase; }
+  .nom-secondaire { font: 500 0.66rem/1.4 var(--f-mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--ebene); margin-top: 3px; }
+
+  .menu { display: flex; align-items: center; gap: 28px; }
+  .menu ul { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; }
+  .menu ul a { font: 560 1rem/1 var(--f-display); text-decoration: none; padding: 8px 0; border-bottom: 2px solid transparent; }
+  .menu ul a[aria-current="page"] { border-color: var(--soleil); }
+  .menu ul a:hover { color: var(--olive); }
+
+  .bascule { display: none; }
+
+  @media (max-width: 900px) {
+    .bascule {
+      display: grid; place-items: center;
+      width: 46px; height: 46px; border: 1px solid var(--trait); border-radius: var(--rayon);
+      background: var(--papier); cursor: pointer;
+    }
+    .trait-menu, .trait-menu::before, .trait-menu::after {
+      display: block; width: 20px; height: 2px; background: var(--ebene); position: relative; transition: transform .2s, background .2s;
+    }
+    .trait-menu::before, .trait-menu::after { content: ""; position: absolute; left: 0; }
+    .trait-menu::before { top: -6px; }
+    .trait-menu::after { top: 6px; }
+    .bascule[aria-expanded="true"] .trait-menu { background: transparent; }
+    .bascule[aria-expanded="true"] .trait-menu::before { transform: translateY(6px) rotate(45deg); }
+    .bascule[aria-expanded="true"] .trait-menu::after { transform: translateY(-6px) rotate(-45deg); }
+
+    .menu {
+      position: absolute; inset: 76px 0 auto 0;
+      flex-direction: column; align-items: stretch; gap: 18px;
+      padding: 20px var(--gouttiere) 28px;
+      background: var(--sable); border-bottom: 1px solid var(--trait);
+      display: none;
+    }
+    .menu.ouvert { display: flex; }
+    .menu ul { flex-direction: column; gap: 4px; }
+    .menu ul a { display: block; font-size: 1.3rem; padding: 10px 0; }
+    .menu .bouton { justify-content: center; }
+  }
+</style>
+
+<script>
+  const bouton = document.querySelector<HTMLButtonElement>(".bascule");
+  const menu = document.getElementById("menu-principal");
+  bouton?.addEventListener("click", () => {
+    const ouvert = bouton.getAttribute("aria-expanded") === "true";
+    bouton.setAttribute("aria-expanded", String(!ouvert));
+    menu?.classList.toggle("ouvert", !ouvert);
+  });
+</script>

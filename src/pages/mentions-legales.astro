@@ -1,0 +1,56 @@
+---
+import Base from "../layouts/Base.astro";
+import { cabinet } from "../config";
+const l = cabinet.legal;
+---
+<Base
+  titre="Mentions légales"
+  description="Mentions légales et politique de confidentialité du site du cabinet Horizon Comptable Afrique SARL."
+>
+  <section class="page-tete">
+    <div class="conteneur">
+      <p class="etiquette">Informations légales</p>
+      <h1>Mentions légales et confidentialité</h1>
+    </div>
+  </section>
+
+  <section class="bande">
+    <div class="conteneur texte-legal">
+      <h2>Éditeur du site</h2>
+      <p>
+        {cabinet.raisonSociale} ({cabinet.sigle} SARL)<br />
+        {l.forme} au capital de {l.capital}<br />
+        RCCM : {l.rccm}<br />
+        Siège social : {l.siege}<br />
+        E-mail : <a href={`mailto:${cabinet.email}`}>{cabinet.email}</a>
+      </p>
+      <p>Directeur de la publication : {l.directeurPublication}.</p>
+
+      <h2>Hébergement</h2>
+      <p>Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107, États-Unis.</p>
+
+      <h2>Propriété intellectuelle</h2>
+      <p>Les textes, le logo et la mise en page de ce site appartiennent au {cabinet.raisonSociale}. Les images utilisées sont libres de droits ou utilisées avec l'autorisation de leurs auteurs. Toute reproduction sans autorisation est interdite.</p>
+
+      <h2 id="donnees">Données personnelles</h2>
+      <p>Le cabinet est responsable du traitement des données collectées sur ce site, au sens de la loi n° 2013-450 du 19 juin 2013 relative à la protection des données à caractère personnel.</p>
+      <p><strong>Données collectées.</strong> Les informations que vous saisissez dans le formulaire de contact ou de rendez-vous (nom, entreprise, téléphone, e-mail, message) et les questions posées à l'assistant virtuel.</p>
+      <p><strong>Utilisation.</strong> Ces informations servent uniquement à répondre à votre demande et à organiser un éventuel rendez-vous. Elles ne sont ni vendues ni cédées.</p>
+      <p><strong>Durée de conservation.</strong> Les demandes sans suite sont supprimées au plus tard trois ans après le dernier échange.</p>
+      <p><strong>Vos droits.</strong> Vous pouvez demander l'accès à vos données, leur rectification ou leur suppression, et vous opposer à leur traitement, en écrivant à <a href={`mailto:${cabinet.email}`}>{cabinet.email}</a>. Vous pouvez aussi saisir l'Autorité de Régulation des Télécommunications/TIC de Côte d'Ivoire (ARTCI).</p>
+
+      <h2>Assistant virtuel</h2>
+      <p>Les réponses de l'assistant sont fournies à titre informatif et ne constituent pas un conseil comptable, fiscal ou juridique. Pour toute situation particulière, contactez le cabinet. Les questions posées peuvent être traitées par un service d'intelligence artificielle tiers : n'y indiquez pas d'informations confidentielles.</p>
+
+      <h2>Mesure d'audience et cookies</h2>
+      <p>Ce site mesure sa fréquentation sans cookie et sans suivi individuel des visiteurs. Aucun cookie publicitaire n'est déposé.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .texte-legal { max-width: 760px; }
+  .texte-legal h2 { font-size: 1.5rem; margin: 40px 0 12px; }
+  .texte-legal h2:first-child { margin-top: 0; }
+  .texte-legal p { font-size: 1.05rem; }
+</style>

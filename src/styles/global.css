@@ -1,0 +1,138 @@
+/* Horizon Comptable Afrique — charte de la maquette
+   Couleurs demandées par le client : sable, brun, olive, noir, jaune soleil. Pas de rouge. */
+
+:root {
+  --sable: #F2E6CF;        /* fond principal */
+  --sable-fonce: #E6D3B0;  /* bandes alternées */
+  --papier: #FBF5EA;       /* cartes, champs */
+  --ebene: #24180F;        /* texte, sections sombres */
+  --brun: #6E4426;         /* titres secondaires, marque */
+  --brun-doux: #8A6A4F;    /* texte secondaire */
+  --olive: #57602D;        /* actions */
+  --olive-fonce: #434A21;
+  --soleil: #E0A12E;       /* accent, soleil du logo */
+  --trait: rgba(36, 24, 15, 0.16);
+
+  --f-display: "Bricolage Grotesque Variable", "Trebuchet MS", sans-serif;
+  --f-texte: "Source Serif 4 Variable", Georgia, serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --largeur: 1180px;
+  --gouttiere: clamp(16px, 4vw, 40px);
+  --rayon: 10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--sable);
+  color: var(--ebene);
+  font: 400 1.125rem/1.6 var(--f-texte);
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, svg { display: block; max-width: 100%; }
+
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--olive); }
+
+:focus-visible { outline: 3px solid var(--soleil); outline-offset: 3px; border-radius: 4px; }
+
+h1, h2, h3 {
+  font-family: var(--f-display);
+  font-stretch: 86%;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  margin: 0;
+  text-wrap: balance;
+}
+h1 { font-size: clamp(2.5rem, 6.2vw, 5.1rem); font-weight: 760; }
+h2 { font-size: clamp(1.9rem, 3.6vw, 2.9rem); font-weight: 720; }
+h3 { font-size: 1.35rem; font-weight: 680; font-stretch: 92%; letter-spacing: -0.005em; line-height: 1.2; }
+p { margin: 0 0 1em; text-wrap: pretty; }
+
+.conteneur { width: min(var(--largeur), 100% - 2 * var(--gouttiere)); margin-inline: auto; }
+
+.etiquette {
+  font: 500 0.75rem/1.4 var(--f-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brun);
+}
+
+.chapeau { font-size: 1.25rem; color: var(--brun); max-width: 38ch; }
+
+.bande { padding-block: clamp(64px, 9vw, 120px); }
+.bande-claire { background: var(--sable-fonce); }
+.bande-sombre { background: var(--ebene); color: var(--sable); }
+.bande-sombre .etiquette { color: var(--soleil); }
+.bande-sombre a:hover { color: var(--soleil); }
+
+.entete-section { display: grid; gap: 14px; margin-bottom: clamp(32px, 5vw, 56px); max-width: 720px; }
+
+/* Boutons */
+.bouton {
+  display: inline-flex; align-items: center; gap: 10px;
+  font: 620 1rem/1 var(--f-display);
+  padding: 15px 22px;
+  border-radius: var(--rayon);
+  border: 2px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color .2s, color .2s, border-color .2s, transform .2s;
+}
+.bouton:active { transform: translateY(1px); }
+.bouton-plein { background: var(--olive); color: var(--papier); }
+.bouton-plein:hover { background: var(--olive-fonce); color: var(--papier); }
+.bouton-contour { border-color: var(--ebene); color: var(--ebene); background: transparent; }
+.bouton-contour:hover { background: var(--ebene); color: var(--sable); }
+.bande-sombre .bouton-contour { border-color: var(--sable); color: var(--sable); }
+.bande-sombre .bouton-contour:hover { background: var(--sable); color: var(--ebene); }
+.bouton-soleil { background: var(--soleil); color: var(--ebene); }
+.bouton-soleil:hover { background: #F0B547; color: var(--ebene); }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* Contenu provisoire, à valider par le client (visible uniquement dans la maquette) */
+.provisoire {
+  outline: 1.5px dashed var(--soleil);
+  outline-offset: 4px;
+  border-radius: 4px;
+  position: relative;
+}
+.provisoire::after {
+  content: "à confirmer";
+  position: absolute; top: -10px; right: -6px;
+  font: 500 0.6rem/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase;
+  background: var(--soleil); color: var(--ebene);
+  padding: 3px 5px; border-radius: 3px;
+}
+
+.visuellement-cache {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+a.visuellement-cache:focus {
+  width: auto; height: auto; clip: auto; z-index: 100; top: 8px; left: 8px;
+  background: var(--ebene); color: var(--sable); padding: 10px 14px; border-radius: var(--rayon);
+}
+
+/* En-tête des pages intérieures */
+.page-tete { padding-block: clamp(48px, 8vw, 96px) clamp(36px, 5vw, 56px); border-bottom: 3px solid var(--ebene); }
+.page-tete .etiquette { margin-bottom: 16px; }
+.page-tete h1 { font-size: clamp(2.3rem, 5.2vw, 4.2rem); max-width: 16ch; margin-bottom: 22px; }
+
+/* Liste « pointée » : chaque élément est coché, comme une écriture vérifiée */
+.pointage { list-style: none; margin: 0; padding: 0; }
+.pointage li { position: relative; padding: 14px 0 14px 36px; border-top: 1px solid var(--trait); }
+.pointage li::before {
+  content: ""; position: absolute; left: 4px; top: 19px; width: 16px; height: 9px;
+  border-left: 3px solid var(--olive); border-bottom: 3px solid var(--olive); transform: rotate(-45deg);
+}

@@ -1,0 +1,215 @@
+---
+import { lienWhatsApp } from "../config";
+---
+<div class="flottants">
+  <a class="pastille pastille-wa" href={lienWhatsApp()} target="_blank" rel="noopener" aria-label="Écrire au cabinet sur WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z" /><path class="combine" d="M9 8.5c.4 2.8 2.7 5.1 5.5 5.6l1-1.2-1.8-.9-.8.8a4 4 0 0 1-2.2-2.2l.8-.8-.9-1.8Z" /></svg>
+    <span class="libelle-wa">WhatsApp</span>
+  </a>
+  <button class="pastille pastille-assistant" type="button" aria-expanded="false" aria-controls="assistant">
+    <svg viewBox="0 0 24 14" aria-hidden="true"><path d="M3 13a9 9 0 0 1 18 0Z" /></svg>
+    Une question ?
+  </button>
+</div>
+
+<section id="assistant" class="assistant" role="dialog" aria-labelledby="assistant-titre" hidden>
+  <header class="assistant-tete">
+    <div>
+      <p id="assistant-titre" class="assistant-nom">Assistant Horizon</p>
+      <p class="assistant-avis">Réponses à titre informatif, sans valeur de conseil comptable, fiscal ou juridique. N'indiquez pas d'informations confidentielles.</p>
+    </div>
+    <button class="fermer" type="button" aria-label="Fermer l'assistant">×</button>
+  </header>
+  <div class="fil" aria-live="polite"></div>
+  <div class="sujets" aria-label="Sujets fréquents"></div>
+  <form class="saisie">
+    <label class="visuellement-cache" for="assistant-question">Votre question</label>
+    <input id="assistant-question" name="question" type="text" autocomplete="off" placeholder="Écrivez votre question…" maxlength="400" />
+    <button type="submit" class="envoyer">Envoyer</button>
+  </form>
+</section>
+
+<style>
+  .flottants { position: fixed; right: 18px; bottom: 18px; z-index: 50; display: grid; gap: 10px; justify-items: end; }
+  .pastille {
+    display: inline-flex; align-items: center; gap: 9px;
+    font: 620 0.98rem/1 var(--f-display); padding: 13px 18px; border-radius: 999px; border: 0; cursor: pointer;
+    text-decoration: none; box-shadow: 0 6px 22px rgba(36, 24, 15, 0.22);
+    transition: transform .2s;
+  }
+  .pastille:hover { transform: translateY(-2px); }
+  .pastille svg { width: 20px; height: 20px; }
+  .pastille-wa { background: var(--olive); color: var(--papier); }
+  .pastille-wa:hover { color: var(--papier); }
+  .pastille-wa svg path { fill: none; stroke: var(--papier); stroke-width: 1.8; stroke-linejoin: round; }
+  .pastille-wa svg .combine { fill: var(--papier); stroke: none; }
+  .pastille-assistant { background: var(--ebene); color: var(--sable); }
+  .pastille-assistant svg { width: 22px; height: 13px; }
+  .pastille-assistant svg path { fill: var(--soleil); }
+  .pastille-assistant[aria-expanded="true"] { visibility: hidden; }
+
+  .assistant {
+    position: fixed; right: 18px; bottom: 18px; z-index: 60;
+    width: min(390px, calc(100vw - 24px)); height: min(600px, calc(100vh - 110px));
+    display: flex; flex-direction: column;
+    background: var(--papier); border: 1px solid var(--trait); border-radius: 16px;
+    box-shadow: 0 18px 50px rgba(36, 24, 15, 0.28); overflow: hidden;
+  }
+  .assistant[hidden] { display: none; }
+  .assistant-tete { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; background: var(--ebene); color: var(--sable); padding: 16px 16px 14px; }
+  .assistant-nom { margin: 0 0 6px; font: 720 1.1rem/1 var(--f-display); }
+  .assistant-nom::before { content: ""; display: inline-block; width: 16px; height: 8px; border-radius: 16px 16px 0 0; background: var(--soleil); margin-right: 8px; }
+  .assistant-avis { margin: 0; font-size: 0.78rem; line-height: 1.4; color: var(--sable-fonce); }
+  .fermer { background: none; border: 0; color: var(--sable); font-size: 1.8rem; line-height: 1; cursor: pointer; padding: 0 4px; }
+
+  .fil { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .fil :global(.message) { max-width: 88%; padding: 10px 13px; border-radius: 12px; font-size: 0.98rem; line-height: 1.45; }
+  .fil :global(.message-assistant) { background: var(--sable); align-self: flex-start; border-bottom-left-radius: 3px; }
+  .fil :global(.message-visiteur) { background: var(--olive); color: var(--papier); align-self: flex-end; border-bottom-right-radius: 3px; }
+  .fil :global(.message a) { display: inline-block; margin-top: 8px; font: 620 0.92rem/1 var(--f-display); color: var(--olive); }
+  .fil :global(.message-attente) { color: var(--brun-doux); font-style: italic; }
+
+  .sujets { display: flex; gap: 8px; overflow-x: auto; padding: 0 16px 10px; scrollbar-width: none; }
+  .sujets :global(button) {
+    flex: none; font: 560 0.86rem/1 var(--f-display); padding: 9px 12px; border-radius: 999px;
+    border: 1px solid var(--trait); background: var(--sable); color: var(--ebene); cursor: pointer;
+  }
+  .sujets :global(button:hover) { border-color: var(--olive); color: var(--olive); }
+
+  .saisie { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--trait); }
+  .saisie input { flex: 1; min-width: 0; font: 400 1rem var(--f-texte); padding: 11px 12px; border: 1px solid var(--trait); border-radius: var(--rayon); background: #fff; color: var(--ebene); }
+  .envoyer { font: 620 0.95rem/1 var(--f-display); padding: 0 14px; border: 0; border-radius: var(--rayon); background: var(--olive); color: var(--papier); cursor: pointer; }
+
+  @media (max-width: 520px) {
+    .flottants { right: 12px; bottom: 12px; grid-auto-flow: column; align-items: center; }
+    .pastille { padding: 12px 15px; font-size: 0.92rem; }
+    .pastille-wa { width: 46px; height: 46px; padding: 0; justify-content: center; }
+    .libelle-wa { display: none; }
+    .assistant { right: 8px; left: 8px; bottom: 8px; width: auto; height: min(78vh, 620px); }
+  }
+</style>
+
+<script>
+  type Entree = { id: string; sujet: string; mots: string[]; reponse: string; action?: { libelle: string; lien: string } };
+  type Base = { accueil: string; repli: string; entrees: Entree[] };
+
+  const panneau = document.getElementById("assistant") as HTMLElement;
+  const ouvrir = document.querySelector<HTMLButtonElement>(".pastille-assistant")!;
+  const fermer = panneau.querySelector<HTMLButtonElement>(".fermer")!;
+  const fil = panneau.querySelector<HTMLElement>(".fil")!;
+  const sujets = panneau.querySelector<HTMLElement>(".sujets")!;
+  const formulaire = panneau.querySelector<HTMLFormElement>(".saisie")!;
+  const champ = panneau.querySelector<HTMLInputElement>("#assistant-question")!;
+
+  let base: Base | null = null;
+  const historique: { role: "visiteur" | "assistant"; texte: string }[] = [];
+
+  const normaliser = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+  async function chargerBase(): Promise<Base> {
+    if (base) return base;
+    const r = await fetch("/assistant/kb.json");
+    base = (await r.json()) as Base;
+    sujets.replaceChildren(...base.entrees.map((e) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = e.sujet;
+      b.addEventListener("click", () => poser(e.sujet, e));
+      return b;
+    }));
+    ajouter("assistant", base.accueil);
+    return base;
+  }
+
+  function ajouter(role: "visiteur" | "assistant", texte: string, action?: Entree["action"]) {
+    const bulle = document.createElement("div");
+    bulle.className = `message message-${role}`;
+    const p = document.createElement("div");
+    p.textContent = texte;
+    bulle.append(p);
+    if (action) {
+      const a = document.createElement("a");
+      a.href = action.lien;
+      a.textContent = `${action.libelle} →`;
+      bulle.append(a);
+    }
+    fil.append(bulle);
+    fil.scrollTop = fil.scrollHeight;
+    historique.push({ role, texte });
+    return bulle;
+  }
+
+  function chercher(question: string, b: Base): Entree | null {
+    const q = normaliser(question);
+    let meilleure: Entree | null = null, score = 0;
+    for (const e of b.entrees) {
+      const s = e.mots.reduce((total, mot) => (q.includes(normaliser(mot)) ? total + (mot.includes(" ") ? 2 : 1) : total), 0);
+      if (s > score) { score = s; meilleure = e; }
+    }
+    return score > 0 ? meilleure : null;
+  }
+
+  // IA générative (Cloudflare Pages Function). En cas d'erreur, de quota atteint (429)
+  // ou d'absence du service (maquette locale), l'assistant programmé répond.
+  async function demanderIA(question: string): Promise<string | null> {
+    const controle = new AbortController();
+    const minuterie = setTimeout(() => controle.abort(), 9000);
+    try {
+      const r = await fetch("/api/assistant", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question, historique: historique.slice(-6) }),
+        signal: controle.signal,
+      });
+      if (!r.ok) return null;
+      const donnees = await r.json();
+      return typeof donnees.reponse === "string" && donnees.reponse.trim() ? donnees.reponse : null;
+    } catch {
+      return null;
+    } finally {
+      clearTimeout(minuterie);
+    }
+  }
+
+  async function poser(question: string, entree?: Entree) {
+    const b = await chargerBase();
+    ajouter("visiteur", question);
+    if (entree) { ajouter("assistant", entree.reponse, entree.action); return; }
+    const attente = ajouter("assistant", "…");
+    attente.classList.add("message-attente");
+    const trouvee = chercher(question, b);
+    const reponseIA = await demanderIA(question);
+    attente.remove();
+    historique.splice(historique.findIndex((h) => h.texte === "…"), 1);
+    if (reponseIA) ajouter("assistant", reponseIA);
+    else if (trouvee) ajouter("assistant", trouvee.reponse, trouvee.action);
+    else ajouter("assistant", b.repli, { libelle: "Contacter le cabinet", lien: "/contact" });
+  }
+
+  async function afficher() {
+    panneau.hidden = false;
+    ouvrir.setAttribute("aria-expanded", "true");
+    await chargerBase();
+    champ.focus();
+  }
+  function masquer() {
+    panneau.hidden = true;
+    ouvrir.setAttribute("aria-expanded", "false");
+    ouvrir.focus();
+  }
+
+  ouvrir.addEventListener("click", afficher);
+  fermer.addEventListener("click", masquer);
+  panneau.addEventListener("keydown", (e) => { if (e.key === "Escape") masquer(); });
+  formulaire.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const q = champ.value.trim();
+    if (!q) return;
+    champ.value = "";
+    poser(q);
+  });
+  window.addEventListener("assistant:demander", async (e) => {
+    await afficher();
+    poser((e as CustomEvent<string>).detail);
+  });
+</script>

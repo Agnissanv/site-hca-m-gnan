@@ -1,0 +1,67 @@
+---
+import { cabinet, navigation, lienWhatsApp } from "../config";
+const annee = new Date().getFullYear();
+---
+<footer class="pied">
+  <div class="conteneur grille">
+    <div class="identite">
+      <div class="marque">
+        <img src="/img/embleme-hca.png" alt="" width="64" height="53" />
+        <div>
+          <p class="nom">Horizon Comptable Afrique</p>
+          <p class="sous">Votre partenaire de confiance en comptabilité</p>
+        </div>
+      </div>
+      <p class="resume">Comptabilité, fiscalité, paie et conseil financier pour les PME et les entrepreneurs de Côte d'Ivoire.</p>
+    </div>
+
+    <div>
+      <p class="etiquette">Nous joindre</p>
+      <ul>
+        <li>{cabinet.ville}</li>
+        <li><a href={lienWhatsApp()} class={cabinet.numeroProvisoire ? "provisoire" : undefined}>WhatsApp : {cabinet.telephone}</a></li>
+        <li><a href={`mailto:${cabinet.email}`}>{cabinet.email}</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="etiquette">Le site</p>
+      <ul>
+        {navigation.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        <li><a href="/mentions-legales">Mentions légales</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="etiquette">Nous suivre</p>
+      <ul>
+        <li><a href={cabinet.linkedin}>LinkedIn</a></li>
+        <li><a href={cabinet.facebook}>Facebook</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="conteneur bas">
+    <p>© {annee} {cabinet.raisonSociale} · RCCM {cabinet.legal.rccm}</p>
+  </div>
+</footer>
+
+<style>
+  .pied { background: var(--ebene); color: var(--sable); padding-top: 72px; }
+  .grille { display: grid; grid-template-columns: 1.6fr 1fr 1fr 0.8fr; gap: 40px; padding-bottom: 56px; }
+  .marque { display: flex; gap: 14px; align-items: center; margin-bottom: 18px; }
+  .marque img { width: 64px; height: auto; }
+  .nom { font: 760 1.3rem/1.1 var(--f-display); font-stretch: 86%; margin: 0; }
+  .sous { font-size: 0.92rem; font-style: italic; color: var(--sable-fonce); margin: 4px 0 0; }
+  .resume { color: var(--sable-fonce); max-width: 36ch; font-size: 1rem; }
+  .etiquette { color: var(--soleil); margin-bottom: 14px; }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 1rem; }
+  a { text-decoration: none; }
+  a:hover { color: var(--soleil); }
+  .bas { border-top: 1px solid rgba(242, 230, 207, 0.18); padding-block: 22px; font: 400 0.8rem/1.5 var(--f-mono); color: var(--sable-fonce); }
+  .bas p { margin: 0; }
+  @media (max-width: 860px) {
+    .grille { grid-template-columns: 1fr 1fr; }
+    .identite { grid-column: 1 / -1; }
+  }
+  @media (max-width: 480px) { .grille { grid-template-columns: 1fr; } }
+</style>

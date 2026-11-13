@@ -1,0 +1,95 @@
+---
+import Base from "../layouts/Base.astro";
+import { lienWhatsApp } from "../config";
+
+const services = [
+  {
+    id: "comptabilite", titre: "Comptabilité et fiscalité",
+    texte: "Une comptabilité tenue chaque mois, des déclarations exactes et à l'heure : la base d'une entreprise sereine face à l'administration.",
+    points: ["Tenue de la comptabilité selon le SYSCOHADA", "Saisie et classement de vos pièces justificatives", "États financiers annuels", "Déclarations fiscales périodiques et annuelles", "Reprise d'une comptabilité en retard"],
+  },
+  {
+    id: "paie", titre: "Paie et gestion sociale",
+    texte: "Vos salariés payés justement, vos cotisations déclarées : vous restez en règle avec la CNPS sans y passer vos soirées.",
+    points: ["Bulletins de paie", "Calcul des cotisations sociales", "Déclarations CNPS", "Contrats de travail et formalités d'embauche", "Suivi de vos obligations d'employeur"],
+  },
+  {
+    id: "conseil", titre: "Conseil et gestion financière",
+    texte: "Des chiffres lisibles pour décider : où va votre argent, ce qui rapporte, ce qui coûte trop.",
+    points: ["Suivi de trésorerie", "Analyse de la rentabilité", "Maîtrise des charges", "Tableaux de bord", "Préparation de vos dossiers de financement"],
+  },
+  {
+    id: "audit", titre: "Audit et contrôle",
+    texte: "Un regard extérieur sur vos comptes et vos procédures, avant qu'un contrôleur ne le fasse.",
+    points: ["Revue de vos comptes", "Contrôle interne et procédures", "Diagnostic financier", "Préparation et accompagnement lors d'un contrôle fiscal"],
+  },
+  {
+    id: "creation", titre: "Création d'entreprise",
+    texte: "Partir du bon pied : la bonne forme juridique, des formalités bien faites et une comptabilité en place dès le premier jour.",
+    points: ["Choix de la forme juridique", "Préparation des documents", "Formalités d'immatriculation et déclaration fiscale d'existence", "Mise en place de votre comptabilité"],
+  },
+  {
+    id: "digitalisation", titre: "Digitalisation et FNE",
+    texte: "La facture normalisée électronique et les logiciels de gestion, sans prise de tête : nous installons, vous gagnez du temps.",
+    points: ["Mise en place de la facture normalisée électronique (FNE)", "Choix et paramétrage d'un logiciel comptable", "Organisation de la transmission de vos pièces", "Formation de vos équipes"],
+  },
+];
+---
+<Base
+  titre="Services"
+  description="Comptabilité SYSCOHADA, fiscalité, paie et CNPS, conseil financier, audit, création d'entreprise et FNE : les services du cabinet Horizon Comptable Afrique à Abidjan."
+>
+  <section class="page-tete">
+    <div class="conteneur">
+      <p class="etiquette">Nos services</p>
+      <h1>Tout ce qu'il faut pour des comptes en règle.</h1>
+      <p class="chapeau">Prenez un service seul ou confiez-nous l'ensemble : nous adaptons notre accompagnement à la taille et au rythme de votre entreprise.</p>
+      <nav class="sommaire" aria-label="Accès direct aux services">
+        {services.map((s) => <a href={`#${s.id}`}>{s.titre}</a>)}
+      </nav>
+    </div>
+  </section>
+
+  {services.map((s, i) => (
+    <section id={s.id} class:list={["bande", "service", { "bande-claire": i % 2 === 1 }]} aria-labelledby={`titre-${s.id}`}>
+      <div class="conteneur service-grille">
+        <div>
+          <h2 id={`titre-${s.id}`}>{s.titre}</h2>
+          <p class="chapeau">{s.texte}</p>
+        </div>
+        <ul class="pointage">
+          {s.points.map((p) => <li>{p}</li>)}
+        </ul>
+      </div>
+    </section>
+  ))}
+
+  <section class="bande bande-sombre" aria-labelledby="titre-appel">
+    <div class="conteneur appel">
+      <div>
+        <p class="etiquette">Un besoin précis ?</p>
+        <h2 id="titre-appel">Dites-nous où vous en êtes.</h2>
+      </div>
+      <div class="actions">
+        <a class="bouton bouton-soleil" href="/contact#rendez-vous">Prendre rendez-vous</a>
+        <a class="bouton bouton-contour" href={lienWhatsApp()} target="_blank" rel="noopener">Écrire sur WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .sommaire { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+  .sommaire a {
+    font: 560 0.92rem/1 var(--f-display); text-decoration: none;
+    padding: 10px 14px; border: 1px solid var(--trait); border-radius: 999px; background: var(--papier);
+  }
+  .sommaire a:hover { border-color: var(--olive); }
+  .service { scroll-margin-top: 80px; padding-block: clamp(48px, 7vw, 88px); }
+  .service-grille { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(28px, 6vw, 80px); align-items: start; }
+  .service h2 { margin-bottom: 16px; }
+  .pointage { border-bottom: 1px solid var(--trait); }
+  .appel { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 28px; }
+  .appel h2 { margin-top: 12px; }
+  @media (max-width: 860px) { .service-grille { grid-template-columns: 1fr; } }
+</style>

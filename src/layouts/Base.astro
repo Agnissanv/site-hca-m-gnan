@@ -1,0 +1,62 @@
+---
+import "@fontsource-variable/bricolage-grotesque/standard.css";
+import "@fontsource-variable/source-serif-4/standard.css";
+import "@fontsource-variable/source-serif-4/standard-italic.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/500.css";
+import "../styles/global.css";
+import Entete from "../components/Entete.astro";
+import Pied from "../components/Pied.astro";
+import Assistant from "../components/Assistant.astro";
+import { cabinet } from "../config";
+
+interface Props {
+  titre: string;
+  description: string;
+  indexer?: boolean;
+}
+const { titre, description, indexer = true } = Astro.props;
+const titreComplet = Astro.url.pathname === "/" ? `${cabinet.nom} · Cabinet comptable à Abidjan` : `${titre} · ${cabinet.nom}`;
+const canonique = new URL(Astro.url.pathname, Astro.site);
+
+const donneesStructurees = {
+  "@context": "https://schema.org",
+  "@type": "AccountingService",
+  name: cabinet.raisonSociale,
+  alternateName: cabinet.nom,
+  url: cabinet.domaine,
+  logo: `${cabinet.domaine}/img/logo-hca.jpg`,
+  email: cabinet.email,
+  areaServed: { "@type": "Country", name: "Côte d'Ivoire" },
+  address: { "@type": "PostalAddress", addressLocality: "Abidjan", addressCountry: "CI" },
+  knowsAbout: ["Comptabilité SYSCOHADA", "Fiscalité", "Paie et CNPS", "Facture normalisée électronique", "Création d'entreprise"],
+};
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titreComplet}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonique} />
+    {!indexer && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#F2E6CF" />
+    <link rel="icon" type="image/png" href="/img/embleme-hca.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_CI" />
+    <meta property="og:title" content={titreComplet} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL("/img/logo-hca.jpg", Astro.site)} />
+    <script type="application/ld+json" set:html={JSON.stringify(donneesStructurees)} />
+  </head>
+  <body>
+    <a class="visuellement-cache" href="#contenu">Aller au contenu</a>
+    <Entete />
+    <main id="contenu">
+      <slot />
+    </main>
+    <Pied />
+    <Assistant />
+  </body>
+</html>

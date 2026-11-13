@@ -1,0 +1,117 @@
+---
+// Signature du site : un compte en T dont la barre horizontale est la ligne d'horizon.
+// À gauche (débit) ce qui pèse sur les entreprises, à droite (crédit) ce que le cabinet règle.
+// Contenu tiré de l'entretien avec M. Gnan (difficultés de ses clients) et de son texte d'ambition.
+const lignes = [
+  { peine: "Des pénalités pour déclarations en retard", reponse: "Vos déclarations DGI et CNPS déposées dans les délais" },
+  { peine: "La crainte d'un redressement ou d'une taxation d'office", reponse: "Un dossier fiscal tenu, prêt pour un contrôle" },
+  { peine: "Une comptabilité confiée à un prestataire peu fiable", reponse: "Une comptabilité régulière, conforme au SYSCOHADA" },
+  { peine: "Une trésorerie et une rentabilité difficiles à lire", reponse: "Des chiffres clairs pour décider et maîtriser vos charges" },
+  { peine: "La FNE et les logiciels comptables qui compliquent tout", reponse: "Des outils de gestion mis en place et maîtrisés" },
+];
+
+const rayons = Array.from({ length: 9 }, (_, i) => {
+  const angle = Math.PI - (Math.PI * (i + 1)) / 10;
+  const r1 = 88, r2 = 112;
+  return {
+    x1: (100 + r1 * Math.cos(angle)).toFixed(1), y1: (118 - r1 * Math.sin(angle)).toFixed(1),
+    x2: (100 + r2 * Math.cos(angle)).toFixed(1), y2: (118 - r2 * Math.sin(angle)).toFixed(1),
+  };
+});
+---
+<figure class="compte" aria-label="Ce qui vous pèse, et ce que nous réglons">
+  <div class="horizon" aria-hidden="true">
+    <svg class="soleil" viewBox="0 0 200 118" preserveAspectRatio="xMidYMax meet">
+      <g class="rayons">
+        {rayons.map((r) => <line x1={r.x1} y1={r.y1} x2={r.x2} y2={r.y2} />)}
+      </g>
+      <circle cx="100" cy="118" r="74" />
+    </svg>
+  </div>
+
+  <div class="tetes">
+    <p><span class="etiquette">Débit</span> Ce qui vous pèse</p>
+    <p><span class="etiquette">Crédit</span> Ce que nous réglons</p>
+  </div>
+
+  <ul class="lignes">
+    {lignes.map((l, i) => (
+      <li style={`--i:${i}`}>
+        <span class="peine"><span class="barre">{l.peine}</span></span>
+        <span class="reponse">
+          <svg class="coche" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5" /></svg>
+          {l.reponse}
+        </span>
+      </li>
+    ))}
+  </ul>
+
+  <figcaption class="solde">
+    <span class="etiquette">Solde</span>
+    <strong>Une entreprise en règle, qui avance.</strong>
+  </figcaption>
+</figure>
+
+<style>
+  .compte { margin: 0; position: relative; }
+
+  /* Le soleil se lève derrière la barre du T */
+  .horizon {
+    overflow: hidden;
+    border-bottom: 3px solid var(--ebene);
+    display: flex; justify-content: center;
+  }
+  .soleil { width: clamp(170px, 22vw, 260px); height: auto; margin-bottom: -1px; animation: lever 1.6s cubic-bezier(.2,.7,.2,1) both; }
+  .soleil circle { fill: var(--soleil); }
+  .soleil line { stroke: var(--soleil); stroke-width: 4; stroke-linecap: round; }
+  .rayons { animation: rayonner 1.2s ease-out .9s both; transform-origin: 100px 118px; }
+  @keyframes lever { from { transform: translateY(78%); } to { transform: translateY(0); } }
+  @keyframes rayonner { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: scale(1); } }
+
+  .tetes, .lignes li { display: grid; grid-template-columns: 1fr 1fr; }
+  .tetes p { margin: 0; padding: 18px clamp(14px, 3vw, 36px) 12px; font: 680 1.15rem/1.2 var(--f-display); font-stretch: 90%; }
+  .tetes p:first-child { color: var(--brun); }
+  .tetes .etiquette { display: block; margin-bottom: 6px; }
+
+  .lignes { list-style: none; margin: 0; padding: 0; position: relative; }
+  /* Le pied du T */
+  .tetes { position: relative; }
+  .lignes::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 3px; margin-left: -1.5px; background: var(--ebene); }
+  .tetes::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 3px; margin-left: -1.5px; background: var(--ebene); }
+
+  .lignes li { border-top: 1px solid var(--trait); }
+  .peine, .reponse { padding: 16px clamp(14px, 3vw, 36px); font-size: 1.05rem; line-height: 1.45; }
+  .peine { color: var(--brun-doux); }
+  .barre {
+    background: linear-gradient(var(--olive), var(--olive)) no-repeat 0 58% / 0% 1.5px;
+    animation: rayer .7s ease-out both;
+    animation-delay: calc(1.3s + var(--i) * .22s);
+  }
+  .reponse { display: flex; gap: 12px; align-items: flex-start; font-weight: 600; }
+  .coche { flex: none; width: 22px; height: 22px; margin-top: 2px; }
+  .coche path { fill: none; stroke: var(--olive); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 26; stroke-dashoffset: 26; animation: cocher .5s ease-out both; animation-delay: calc(1.5s + var(--i) * .22s); }
+  @keyframes rayer { to { background-size: 100% 1.5px; } }
+  @keyframes cocher { to { stroke-dashoffset: 0; } }
+
+  .solde {
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px;
+    border-top: 3px double var(--ebene);
+    border-bottom: 3px double var(--ebene);
+    margin-top: 0; padding: 16px clamp(14px, 3vw, 36px);
+  }
+  .solde strong { font: 720 clamp(1.25rem, 2.4vw, 1.7rem)/1.2 var(--f-display); font-stretch: 88%; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .barre { background-size: 100% 1.5px; }
+    .coche path { stroke-dashoffset: 0; }
+  }
+
+  @media (max-width: 720px) {
+    .tetes { display: none; }
+    .lignes::before { display: none; }
+    .lignes li { grid-template-columns: 1fr; }
+    .peine { padding: 14px 4px 2px; font-size: 0.95rem; }
+    .reponse { padding: 4px 4px 14px; }
+    .solde { padding-inline: 4px; }
+  }
+</style>

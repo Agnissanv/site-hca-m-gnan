@@ -26,7 +26,10 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - run: npm ci
+      # npm install plutôt que npm ci : le package-lock.json généré sous Windows omet
+      # @emnapi/core et @emnapi/runtime (dépendances des binaires WebAssembly), ce qui
+      # fait échouer la vérification stricte de npm ci sous Linux.
+      - run: npm install --no-audit --no-fund
       - run: npm run build
         env:
           SITE_URL: https://agnissanv.github.io

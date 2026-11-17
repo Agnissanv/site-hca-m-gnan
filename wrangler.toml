@@ -1,0 +1,15 @@
+# Configuration Cloudflare Pages du site Horizon Comptable Afrique
+# Déploiement : Cloudflare Pages relié au dépôt GitHub (commande de build : npm run build, dossier : dist)
+# Les fonctions serveur sont dans /functions (api/assistant et api/contact).
+name = "horizon-comptable"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-11-01"
+
+# Espace KV pour limiter le nombre de questions posées à l'IA par visiteur (facultatif).
+# À créer une fois : npx wrangler kv namespace create QUOTA, puis décommenter avec l'identifiant obtenu.
+# [[kv_namespaces]]
+# binding = "QUOTA"
+# id = "à_remplir"
+
+# Les clés (GEMINI_API_KEY, RESEND_API_KEY, TURNSTILE_SECRET…) ne vont JAMAIS ici :
+# en production, Cloudflare Pages > Settings > Variables and Secrets ; en local, fichier .dev.vars (ignoré par Git).

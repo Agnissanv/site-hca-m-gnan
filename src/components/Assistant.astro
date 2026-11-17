@@ -1,8 +1,14 @@
 ---
 import { lienWhatsApp } from "../config";
+import { ui, type Langue } from "../i18n";
+
+interface Props { langue: Langue }
+const { langue } = Astro.props;
+const t = ui[langue];
+const a = t.assistant;
 ---
 <div class="flottants">
-  <a class="pastille pastille-wa" href={lienWhatsApp()} target="_blank" rel="noopener" aria-label="Écrire au cabinet sur WhatsApp">
+  <a class="pastille pastille-wa" href={lienWhatsApp(t.messageWhatsApp)} target="_blank" rel="noopener" aria-label={a.whatsappAria}>
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z" /><path class="combine" d="M9 8.5c.4 2.8 2.7 5.1 5.5 5.6l1-1.2-1.8-.9-.8.8a4 4 0 0 1-2.2-2.2l.8-.8-.9-1.8Z" /></svg>
     <span class="libelle-wa">WhatsApp</span>
   </a>
@@ -13,24 +19,24 @@ import { lienWhatsApp } from "../config";
       <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
       <path d="M12 17h.01" />
     </svg>
-    Une question ?
+    {a.pastille}
   </button>
 </div>
 
-<section id="assistant" class="assistant" role="dialog" aria-labelledby="assistant-titre" hidden>
+<section id="assistant" class="assistant" role="dialog" aria-labelledby="assistant-titre" data-base={a.base} data-langue={langue} hidden>
   <header class="assistant-tete">
     <div>
-      <p id="assistant-titre" class="assistant-nom">Assistant Horizon</p>
-      <p class="assistant-avis">Réponses à titre informatif, sans valeur de conseil comptable, fiscal ou juridique. N'indiquez pas d'informations confidentielles.</p>
+      <p id="assistant-titre" class="assistant-nom">{a.titre}</p>
+      <p class="assistant-avis">{a.avis}</p>
     </div>
-    <button class="fermer" type="button" aria-label="Fermer l'assistant">×</button>
+    <button class="fermer" type="button" aria-label={a.fermer}>×</button>
   </header>
   <div class="fil" aria-live="polite"></div>
-  <div class="sujets" aria-label="Sujets fréquents"></div>
+  <div class="sujets" aria-label={a.sujets}></div>
   <form class="saisie">
-    <label class="visuellement-cache" for="assistant-question">Votre question</label>
-    <input id="assistant-question" name="question" type="text" autocomplete="off" placeholder="Écrivez votre question…" maxlength="400" />
-    <button type="submit" class="envoyer">Envoyer</button>
+    <label class="visuellement-cache" for="assistant-question">{a.label}</label>
+    <input id="assistant-question" name="question" type="text" autocomplete="off" placeholder={a.placeholder} maxlength="400" />
+    <button type="submit" class="envoyer">{a.envoyer}</button>
   </form>
 </section>
 
@@ -93,9 +99,11 @@ import { lienWhatsApp } from "../config";
 </style>
 
 <script>
-  type Entree = { id: string; sujet: string; mots: string[]; reponse: string; action?: { libelle: string; lien: string } };
-  type Base = { accueil: string; repli: string; entrees: Entree[] };
+  type Action = { libelle: string; lien: string };
+  type Entree = { id: string; sujet: string; mots: string[]; reponse: string; action?: Action };
+  type Base = { accueil: string; repli: string; repliAction: Action; entrees: Entree[] };
 
+  const PREFIXE = import.meta.env.BASE_URL.replace(/\/$/, "");
   const panneau = document.getElementById("assistant") as HTMLElement;
   const ouvrir = document.querySelector<HTMLButtonElement>(".pastille-assistant")!;
   const fermer = panneau.querySelector<HTMLButtonElement>(".fermer")!;
@@ -103,15 +111,17 @@ import { lienWhatsApp } from "../config";
   const sujets = panneau.querySelector<HTMLElement>(".sujets")!;
   const formulaire = panneau.querySelector<HTMLFormElement>(".saisie")!;
   const champ = panneau.querySelector<HTMLInputElement>("#assistant-question")!;
+  const langue = panneau.dataset.langue ?? "fr";
 
   let base: Base | null = null;
   const historique: { role: "visiteur" | "assistant"; texte: string }[] = [];
 
   const normaliser = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const lienInterne = (lien: string) => (lien.startsWith("/") ? `${PREFIXE}${lien}` : lien);
 
   async function chargerBase(): Promise<Base> {
     if (base) return base;
-    const r = await fetch(`${import.meta.env.BASE_URL.replace(/\/$/, "")}/assistant/kb.json`);
+    const r = await fetch(`${PREFIXE}${panneau.dataset.base ?? "/assistant/kb.json"}`);
     base = (await r.json()) as Base;
     sujets.replaceChildren(...base.entrees.map((e) => {
       const b = document.createElement("button");
@@ -124,7 +134,7 @@ import { lienWhatsApp } from "../config";
     return base;
   }
 
-  function ajouter(role: "visiteur" | "assistant", texte: string, action?: Entree["action"]) {
+  function ajouter(role: "visiteur" | "assistant", texte: string, action?: Action) {
     const bulle = document.createElement("div");
     bulle.className = `message message-${role}`;
     const p = document.createElement("div");
@@ -132,7 +142,7 @@ import { lienWhatsApp } from "../config";
     bulle.append(p);
     if (action) {
       const a = document.createElement("a");
-      a.href = action.lien.startsWith("/") ? `${import.meta.env.BASE_URL.replace(/\/$/, "")}${action.lien}` : action.lien;
+      a.href = lienInterne(action.lien);
       a.textContent = `${action.libelle} →`;
       bulle.append(a);
     }
@@ -146,27 +156,27 @@ import { lienWhatsApp } from "../config";
     const q = normaliser(question);
     let meilleure: Entree | null = null, score = 0;
     for (const e of b.entrees) {
-      const s = e.mots.reduce((total, mot) => (q.includes(normaliser(mot)) ? total + (mot.includes(" ") ? 2 : 1) : total), 0);
+      const s = e.mots.reduce((total, mot) => (q.includes(normaliser(mot)) ? total + (mot.includes(" ") ? 2 : 1) : total), 0);
       if (s > score) { score = s; meilleure = e; }
     }
-    return score > 0 ? meilleure : null;
+    return score > 0 ? meilleure : null;
   }
 
   // IA générative (Cloudflare Pages Function). En cas d'erreur, de quota atteint (429)
-  // ou d'absence du service (maquette locale), l'assistant programmé répond.
+  // ou d'absence du service (maquette, aperçu), l'assistant programmé répond.
   async function demanderIA(question: string): Promise<string | null> {
     const controle = new AbortController();
     const minuterie = setTimeout(() => controle.abort(), 9000);
     try {
-      const r = await fetch(`${import.meta.env.BASE_URL.replace(/\/$/, "")}/api/assistant`, {
+      const r = await fetch(`${PREFIXE}/api/assistant`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question, historique: historique.slice(-6) }),
+        body: JSON.stringify({ question, langue, historique: historique.slice(-6) }),
         signal: controle.signal,
       });
       if (!r.ok) return null;
       const donnees = await r.json();
-      return typeof donnees.reponse === "string" && donnees.reponse.trim() ? donnees.reponse : null;
+      return typeof donnees.reponse === "string" && donnees.reponse.trim() ? donnees.reponse : null;
     } catch {
       return null;
     } finally {
@@ -186,7 +196,7 @@ import { lienWhatsApp } from "../config";
     historique.splice(historique.findIndex((h) => h.texte === "…"), 1);
     if (reponseIA) ajouter("assistant", reponseIA);
     else if (trouvee) ajouter("assistant", trouvee.reponse, trouvee.action);
-    else ajouter("assistant", b.repli, { libelle: "Contacter le cabinet", lien: "/contact" });
+    else ajouter("assistant", b.repli, b.repliAction);
   }
 
   async function afficher() {

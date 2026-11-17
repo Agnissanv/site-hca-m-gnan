@@ -9,18 +9,22 @@ import Entete from "../components/Entete.astro";
 import Pied from "../components/Pied.astro";
 import Assistant from "../components/Assistant.astro";
 import { cabinet, lien } from "../config";
+import { ui, url, langues, type Langue, type Page } from "../i18n";
 
 interface Props {
   titre: string;
   description: string;
+  langue: Langue;
+  page: Page;
   indexer?: boolean;
   /** La page s'ouvre sur une grande photo : l'en-tête transparent passe en clair tant qu'on n'a pas défilé. */
   heroPhoto?: boolean;
 }
-const { titre, description, indexer = true, heroPhoto = false } = Astro.props;
-const estAccueil = Astro.url.pathname.replace(/\/$/, "") === lien("/").replace(/\/$/, "");
-const titreComplet = estAccueil ?`${cabinet.nom} · Cabinet comptable à Abidjan` : `${titre} · ${cabinet.nom}`;
+const { titre, description, langue, page, indexer = true, heroPhoto = false } = Astro.props;
+const t = ui[langue];
+const titreComplet = page === "accueil" ? `${cabinet.nom} · ${t.titreAccueil}` : `${titre} · ${cabinet.nom}`;
 const canonique = new URL(Astro.url.pathname, Astro.site);
+const versions = langues.map((l) => ({ langue: l, href: new URL(url(page, l), Astro.site).toString() }));
 // Aperçu (GitHub Pages, etc.) : jamais indexé par les moteurs de recherche.
 const apercu = !(Astro.site?.hostname ?? "").endsWith("horizoncomptable.com");
 
@@ -34,22 +38,26 @@ const donneesStructurees = {
   email: cabinet.email,
   areaServed: { "@type": "Country", name: "Côte d'Ivoire" },
   address: { "@type": "PostalAddress", addressLocality: "Abidjan", addressCountry: "CI" },
+  availableLanguage: ["fr", "en"],
   knowsAbout: ["Comptabilité SYSCOHADA", "Fiscalité", "Paie et CNPS", "Facture normalisée électronique", "Création d'entreprise"],
 };
 ---
 <!doctype html>
-<html lang="fr">
+<html lang={langue}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{titreComplet}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonique} />
+    {versions.map((v) => <link rel="alternate" hreflang={v.langue} href={v.href} />)}
+    <link rel="alternate" hreflang="x-default" href={versions[0].href} />
     {(!indexer || apercu) && <meta name="robots" content="noindex, nofollow" />}
     <meta name="theme-color" content="#F2E6CF" />
     <link rel="icon" type="image/png" href={lien("/img/embleme-hca.png")} />
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="fr_CI" />
+    <meta property="og:locale" content={langue === "fr" ? "fr_CI" : "en_GB"} />
+    <meta property="og:locale:alternate" content={langue === "fr" ? "en_GB" : "fr_CI"} />
     <meta property="og:title" content={titreComplet} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(lien("/img/logo-hca.jpg"), Astro.site)} />
@@ -57,12 +65,12 @@ const donneesStructurees = {
     {heroPhoto && <link rel="preconnect" href="https://images.unsplash.com" />}
   </head>
   <body class={heroPhoto ? "avec-photo" : undefined}>
-    <a class="visuellement-cache" href="#contenu">Aller au contenu</a>
-    <Entete />
+    <a class="visuellement-cache" href="#contenu">{t.allerContenu}</a>
+    <Entete langue={langue} page={page} />
     <main id="contenu">
       <slot />
     </main>
-    <Pied />
-    <Assistant />
+    <Pied langue={langue} />
+    <Assistant langue={langue} />
   </body>
 </html>

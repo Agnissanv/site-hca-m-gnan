@@ -122,6 +122,8 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   padding: 3px 5px; border-radius: 3px;
 }
 
+:lang(en) .provisoire::after { content: "to confirm"; }
+
 .visuellement-cache {
   position: absolute; width: 1px; height: 1px; overflow: hidden;
   clip: rect(0 0 0 0); white-space: nowrap;

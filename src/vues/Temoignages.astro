@@ -1,0 +1,40 @@
+---
+import Base from "../layouts/Base.astro";
+import { url, type Langue } from "../i18n";
+
+interface Props { langue: Langue }
+const { langue } = Astro.props;
+
+// Page prévue au contrat, masquée du menu et du référencement tant qu'aucun vrai témoignage
+// (recueilli avec l'accord du client) n'est disponible. Aucun témoignage inventé.
+const textes = {
+  fr: {
+    titre: "Témoignages",
+    description: "Ce que les clients du cabinet Horizon Comptable Afrique disent de leur accompagnement.",
+    etiquette: "Témoignages",
+    titrePage: "Les avis de nos clients arrivent.",
+    chapeau: "Vous êtes accompagné par le cabinet ? Racontez-nous votre expérience : avec votre accord, nous la publierons ici.",
+    bouton: "Partager mon expérience",
+  },
+  en: {
+    titre: "Testimonials",
+    description: "What clients of Horizon Comptable Afrique say about the firm's support.",
+    etiquette: "Testimonials",
+    titrePage: "Our clients' reviews are on their way.",
+    chapeau: "Are you a client of the firm? Tell us about your experience: with your consent, we will publish it here.",
+    bouton: "Share my experience",
+  },
+}[langue];
+---
+<Base titre={textes.titre} description={textes.description} langue={langue} page="temoignages" indexer={false}>
+  <section class="page-tete">
+    <div class="conteneur">
+      <p class="etiquette">{textes.etiquette}</p>
+      <h1>{textes.titrePage}</h1>
+      <p class="chapeau">{textes.chapeau}</p>
+      <div class="actions">
+        <a class="bouton bouton-plein" href={url("contact", langue)}>{textes.bouton}</a>
+      </div>
+    </div>
+  </section>
+</Base>

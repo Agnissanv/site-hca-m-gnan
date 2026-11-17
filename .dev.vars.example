@@ -1,0 +1,12 @@
+# Copier ce fichier en .dev.vars pour tester les fonctions en local (npx wrangler pages dev dist).
+# .dev.vars est ignoré par Git : n'y mettez jamais de vraies clés dans un fichier suivi.
+
+GEMINI_API_KEY=
+GEMINI_MODEL=gemini-2.5-flash-lite
+
+RESEND_API_KEY=
+EMAIL_EXPEDITEUR=Site Horizon Comptable <site@horizoncomptable.com>
+EMAIL_DESTINATAIRE=contact@horizoncomptable.com
+
+# Clés de TEST officielles de Cloudflare (toujours valides) ; à remplacer par les vraies en production.
+TURNSTILE_SECRET=1x0000000000000000000000000000000AA

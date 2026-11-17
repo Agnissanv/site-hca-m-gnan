@@ -1,0 +1,106 @@
+---
+import Base from "../layouts/Base.astro";
+import { cabinet } from "../config";
+import type { Langue } from "../i18n";
+
+interface Props { langue: Langue }
+const { langue } = Astro.props;
+const l = cabinet.legal;
+---
+{langue === "fr" ? (
+  <Base titre="Mentions légales" description="Mentions légales et politique de confidentialité du site du cabinet Horizon Comptable Afrique SARL." langue="fr" page="legal">
+    <section class="page-tete">
+      <div class="conteneur">
+        <p class="etiquette">Informations légales</p>
+        <h1>Mentions légales et confidentialité</h1>
+      </div>
+    </section>
+
+    <section class="bande">
+      <div class="conteneur texte-legal">
+        <h2>Éditeur du site</h2>
+        <p>
+          {cabinet.raisonSociale} ({cabinet.sigle} SARL)<br />
+          {l.forme} au capital de {l.capital}<br />
+          RCCM&nbsp;: {l.rccm}<br />
+          Siège social&nbsp;: {l.siege}<br />
+          E-mail&nbsp;: <a href={`mailto:${cabinet.email}`}>{cabinet.email}</a>
+        </p>
+        <p>Directeur de la publication&nbsp;: {l.directeurPublication}.</p>
+
+        <h2>Hébergement</h2>
+        <p>Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107, États-Unis.</p>
+
+        <h2>Propriété intellectuelle</h2>
+        <p>Les textes, le logo et la mise en page de ce site appartiennent au {cabinet.raisonSociale}. Les images utilisées sont libres de droits ou utilisées avec l'autorisation de leurs auteurs. Toute reproduction sans autorisation est interdite.</p>
+        <p>Photo de la page d'accueil&nbsp;: Jakub Żerdzicki, via <a href="https://unsplash.com/photos/heiYgqp0Tsk" rel="noopener" target="_blank">Unsplash</a> (licence Unsplash).</p>
+
+        <h2 id="donnees">Données personnelles</h2>
+        <p>Le cabinet est responsable du traitement des données collectées sur ce site, au sens de la loi n° 2013-450 du 19 juin 2013 relative à la protection des données à caractère personnel.</p>
+        <p><strong>Données collectées.</strong> Les informations que vous saisissez dans le formulaire de contact ou de rendez-vous (nom, entreprise, téléphone, e-mail, message) et les questions posées à l'assistant virtuel.</p>
+        <p><strong>Utilisation.</strong> Ces informations servent uniquement à répondre à votre demande et à organiser un éventuel rendez-vous. Elles ne sont ni vendues ni cédées.</p>
+        <p><strong>Durée de conservation.</strong> Les demandes sans suite sont supprimées au plus tard trois ans après le dernier échange.</p>
+        <p><strong>Vos droits.</strong> Vous pouvez demander l'accès à vos données, leur rectification ou leur suppression, et vous opposer à leur traitement, en écrivant à <a href={`mailto:${cabinet.email}`}>{cabinet.email}</a>. Vous pouvez aussi saisir l'Autorité de Régulation des Télécommunications/TIC de Côte d'Ivoire (ARTCI).</p>
+
+        <h2>Assistant virtuel</h2>
+        <p>Les réponses de l'assistant sont fournies à titre informatif et ne constituent pas un conseil comptable, fiscal ou juridique. Pour toute situation particulière, contactez le cabinet. Les questions posées peuvent être traitées par un service d'intelligence artificielle tiers&nbsp;: n'y indiquez pas d'informations confidentielles.</p>
+
+        <h2>Mesure d'audience et cookies</h2>
+        <p>Ce site mesure sa fréquentation sans cookie et sans suivi individuel des visiteurs. Aucun cookie publicitaire n'est déposé.</p>
+      </div>
+    </section>
+  </Base>
+) : (
+  <Base titre="Legal notice" description="Legal notice and privacy policy of the Horizon Comptable Afrique SARL website." langue="en" page="legal">
+    <section class="page-tete">
+      <div class="conteneur">
+        <p class="etiquette">Legal information</p>
+        <h1>Legal notice and privacy</h1>
+      </div>
+    </section>
+
+    <section class="bande">
+      <div class="conteneur texte-legal">
+        <p class="note">This English version is provided for convenience. In the event of any discrepancy, the French version prevails.</p>
+
+        <h2>Website publisher</h2>
+        <p>
+          {cabinet.raisonSociale} ({cabinet.sigle} SARL)<br />
+          Limited liability company (SARL) with a share capital of 3,000,000 FCFA<br />
+          Trade and Personal Property Credit Register (RCCM): {l.rccm}<br />
+          Registered office: Quartier Jérusalem Forestier, BP 189 Divo, Côte d'Ivoire<br />
+          Email: <a href={`mailto:${cabinet.email}`}>{cabinet.email}</a>
+        </p>
+        <p>Publication director: Mr GNAN Younegnre Joël, Managing Partner.</p>
+
+        <h2>Hosting</h2>
+        <p>Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107, United States.</p>
+
+        <h2>Intellectual property</h2>
+        <p>The texts, logo and layout of this website belong to {cabinet.raisonSociale}. Images are royalty-free or used with their authors' permission. Any reproduction without permission is prohibited.</p>
+        <p>Home page photo: Jakub Żerdzicki, via <a href="https://unsplash.com/photos/heiYgqp0Tsk" rel="noopener" target="_blank">Unsplash</a> (Unsplash License).</p>
+
+        <h2 id="donnees">Personal data</h2>
+        <p>The firm is the data controller for the data collected on this website, within the meaning of Ivorian Law No. 2013-450 of 19 June 2013 on the protection of personal data.</p>
+        <p><strong>Data collected.</strong> The information you enter in the contact or appointment form (name, company, phone, email, message) and the questions you ask the virtual assistant.</p>
+        <p><strong>Use.</strong> This information is used solely to respond to your request and, where relevant, to arrange a meeting. It is never sold or transferred.</p>
+        <p><strong>Retention period.</strong> Requests that do not lead to an engagement are deleted no later than three years after the last exchange.</p>
+        <p><strong>Your rights.</strong> You may request access to, correction or deletion of your data, and object to its processing, by writing to <a href={`mailto:${cabinet.email}`}>{cabinet.email}</a>. You may also refer the matter to the Côte d'Ivoire Telecommunications/ICT Regulatory Authority (ARTCI).</p>
+
+        <h2>Virtual assistant</h2>
+        <p>The assistant's answers are for information only and do not constitute accounting, tax or legal advice. For any specific situation, please contact the firm. Questions may be processed by a third-party artificial intelligence service: please do not include confidential information.</p>
+
+        <h2>Audience measurement and cookies</h2>
+        <p>This website measures its traffic without cookies and without tracking individual visitors. No advertising cookies are used.</p>
+      </div>
+    </section>
+  </Base>
+)}
+
+<style>
+  .texte-legal { max-width: 760px; }
+  .texte-legal h2 { font-size: 1.5rem; margin: 40px 0 12px; }
+  .texte-legal h2:first-child { margin-top: 0; }
+  .texte-legal p { font-size: 1.05rem; }
+  .note { font-style: italic; color: var(--brun); border-left: 3px solid var(--soleil); padding-left: 14px; }
+</style>

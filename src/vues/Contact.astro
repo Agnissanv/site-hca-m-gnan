@@ -1,0 +1,305 @@
+---
+import Base from "../layouts/Base.astro";
+import { cabinet, lienWhatsApp } from "../config";
+import { ui, url, type Langue } from "../i18n";
+
+interface Props { langue: Langue }
+const { langue } = Astro.props;
+
+// Clé publique Turnstile (anti-spam de Cloudflare), fournie au moment du build.
+// Absente (maquette, aperçu GitHub Pages) : le widget n'est pas affiché.
+const cleTurnstile = import.meta.env.PUBLIC_TURNSTILE_SITEKEY;
+
+// Les valeurs envoyées au cabinet (moment, format) restent en français quelle que soit la langue du visiteur.
+const textes = {
+  fr: {
+    titre: "Contact et rendez-vous",
+    description: "Contactez le cabinet Horizon Comptable Afrique à Abidjan : rendez-vous, WhatsApp ou formulaire. Réponse rapide.",
+    etiquette: "Contact",
+    titrePage: "Parlons de votre situation.",
+    chapeau: "Une question, un retard de déclarations, un projet de création : écrivez-nous, nous revenons vers vous rapidement.",
+    moyensAria: "Nous joindre directement",
+    whatsapp: "WhatsApp et téléphone",
+    email: "Par e-mail",
+    rencontrer: "Où nous rencontrer",
+    rencontrerTexte: "Abidjan, et partout en Côte d'Ivoire : en rendez-vous, par téléphone ou en visioconférence.",
+    demande: "Votre demande",
+    poserQuestion: "Poser une question",
+    demanderRdv: "Demander un rendez-vous",
+    nom: "Nom et prénoms",
+    entreprise: "Entreprise",
+    telephone: "Téléphone ou WhatsApp",
+    courriel: "E-mail",
+    date: "Date souhaitée",
+    moment: "Moment de la journée",
+    moments: [{ valeur: "Matin", libelle: "Matin" }, { valeur: "Après-midi", libelle: "Après-midi" }],
+    format: "Format",
+    formats: [
+      { valeur: "Rendez-vous en personne (lieu à convenir)", libelle: "Rendez-vous en personne (lieu à convenir)" },
+      { valeur: "Appel téléphonique", libelle: "Appel téléphonique" },
+      { valeur: "Visioconférence", libelle: "Visioconférence" },
+    ],
+    message: "Votre message",
+    messageAide: "Votre activité, votre besoin, vos délais…",
+    accordAvant: "J'accepte que ces informations soient utilisées pour répondre à ma demande (voir la ",
+    accordLien: "politique de confidentialité",
+    accordApres: ").",
+    piege: "Site web",
+    messages: {
+      envoyerQuestion: "Envoyer ma question",
+      envoyerRdv: "Demander le rendez-vous",
+      envoi: "Envoi en cours…",
+      manquants: "Complétez les champs marqués d'une étoile et cochez la case d'accord pour envoyer votre demande.",
+      succes: "Demande envoyée. Le cabinet vous répond rapidement, par téléphone ou par e-mail.",
+      apercu: "Aperçu de la maquette : l'envoi du formulaire sera actif sur le site en ligne. En attendant, écrivez-nous sur WhatsApp.",
+      incomplet: "Certaines informations sont incomplètes ou mal saisies. Vérifiez le formulaire, puis réessayez.",
+      antiRobot: "La vérification anti-robot n'a pas abouti. Cochez-la de nouveau, puis renvoyez votre demande.",
+      erreur: "Votre demande n'a pas pu être envoyée. Réessayez dans un instant, ou écrivez-nous directement sur WhatsApp.",
+    },
+  },
+  en: {
+    titre: "Contact and appointments",
+    description: "Contact Horizon Comptable Afrique in Abidjan: appointment, WhatsApp or contact form. Quick reply.",
+    etiquette: "Contact",
+    titrePage: "Let's talk about your situation.",
+    chapeau: "A question, overdue returns, a plan to set up a company: write to us and we will get back to you quickly.",
+    moyensAria: "Reach us directly",
+    whatsapp: "WhatsApp and phone",
+    email: "By email",
+    rencontrer: "Where to meet us",
+    rencontrerTexte: "Abidjan and anywhere in Côte d'Ivoire: in person, by phone or by video call.",
+    demande: "Your request",
+    poserQuestion: "Ask a question",
+    demanderRdv: "Request an appointment",
+    nom: "Full name",
+    entreprise: "Company",
+    telephone: "Phone or WhatsApp",
+    courriel: "Email",
+    date: "Preferred date",
+    moment: "Time of day",
+    moments: [{ valeur: "Matin", libelle: "Morning" }, { valeur: "Après-midi", libelle: "Afternoon" }],
+    format: "Format",
+    formats: [
+      { valeur: "Rendez-vous en personne (lieu à convenir)", libelle: "In-person meeting (place to be agreed)" },
+      { valeur: "Appel téléphonique", libelle: "Phone call" },
+      { valeur: "Visioconférence", libelle: "Video call" },
+    ],
+    message: "Your message",
+    messageAide: "Your business, your needs, your timeline…",
+    accordAvant: "I agree that this information may be used to respond to my request (see the ",
+    accordLien: "privacy policy",
+    accordApres: ").",
+    piege: "Website",
+    messages: {
+      envoyerQuestion: "Send my question",
+      envoyerRdv: "Request the appointment",
+      envoi: "Sending…",
+      manquants: "Fill in the fields marked with an asterisk and tick the consent box to send your request.",
+      succes: "Request sent. The firm will get back to you quickly, by phone or email.",
+      apercu: "Mock-up preview: the form will work on the live site. In the meantime, write to us on WhatsApp.",
+      incomplet: "Some information is missing or incorrect. Check the form, then try again.",
+      antiRobot: "The anti-robot check did not go through. Tick it again, then resend your request.",
+      erreur: "Your request could not be sent. Try again in a moment, or write to us directly on WhatsApp.",
+    },
+  },
+}[langue];
+const t = ui[langue];
+---
+<Base titre={textes.titre} description={textes.description} langue={langue} page="contact">
+  <section class="page-tete">
+    <div class="conteneur">
+      <p class="etiquette">{textes.etiquette}</p>
+      <h1>{textes.titrePage}</h1>
+      <p class="chapeau">{textes.chapeau}</p>
+    </div>
+  </section>
+
+  <section class="bande">
+    <div class="conteneur contact">
+      <aside class="moyens" aria-label={textes.moyensAria}>
+        <div class="moyen">
+          <p class="etiquette">{textes.whatsapp}</p>
+          <p><a class:list={["detail", { provisoire: cabinet.numeroProvisoire }]} href={lienWhatsApp(t.messageWhatsApp)} target="_blank" rel="noopener">{cabinet.telephone}</a></p>
+        </div>
+        <div class="moyen">
+          <p class="etiquette">{textes.email}</p>
+          <p><a href={`mailto:${cabinet.email}`}>{cabinet.email}</a></p>
+        </div>
+        <div class="moyen">
+          <p class="etiquette">{textes.rencontrer}</p>
+          <p>{textes.rencontrerTexte}</p>
+        </div>
+      </aside>
+
+      <form id="rendez-vous" class="formulaire" novalidate data-messages={JSON.stringify(textes.messages)}>
+        <input type="hidden" name="langue" value={langue} />
+        <fieldset class="type">
+          <legend>{textes.demande}</legend>
+          <label><input type="radio" name="type" value="question" checked /> {textes.poserQuestion}</label>
+          <label><input type="radio" name="type" value="rendez-vous" /> {textes.demanderRdv}</label>
+        </fieldset>
+
+        <div class="champs">
+          <label><span>{textes.nom} <span class="requis" aria-hidden="true">*</span></span>
+            <input name="nom" type="text" autocomplete="name" required />
+          </label>
+          <label>{textes.entreprise}
+            <input name="entreprise" type="text" autocomplete="organization" />
+          </label>
+          <label><span>{textes.telephone} <span class="requis" aria-hidden="true">*</span></span>
+            <input name="telephone" type="tel" autocomplete="tel" placeholder="+225 …" required />
+          </label>
+          <label>{textes.courriel}
+            <input name="email" type="email" autocomplete="email" />
+          </label>
+        </div>
+
+        <div class="champs rdv" hidden>
+          <label>{textes.date}
+            <input name="date" type="date" />
+          </label>
+          <label>{textes.moment}
+            <select name="moment">
+              {textes.moments.map((m) => <option value={m.valeur}>{m.libelle}</option>)}
+            </select>
+          </label>
+          <label class="large">{textes.format}
+            <select name="format">
+              {textes.formats.map((f) => <option value={f.valeur}>{f.libelle}</option>)}
+            </select>
+          </label>
+        </div>
+
+        <label class="large"><span>{textes.message} <span class="requis" aria-hidden="true">*</span></span>
+          <textarea name="message" rows="5" required placeholder={textes.messageAide}></textarea>
+        </label>
+
+        <label class="accord">
+          <input type="checkbox" name="accord" required />
+          <span>{textes.accordAvant}<a href={url("legal", langue, "#donnees")}>{textes.accordLien}</a>{textes.accordApres}</span>
+        </label>
+
+        <!-- Champ piège : invisible pour les visiteurs, rempli par les robots -->
+        <div class="piege" aria-hidden="true">
+          <label>{textes.piege} <input name="site_web" type="text" tabindex="-1" autocomplete="off" /></label>
+        </div>
+
+        {cleTurnstile && <div class="cf-turnstile" data-sitekey={cleTurnstile} data-language={langue} data-theme="light" data-size="flexible"></div>}
+
+        <p class="etat" role="status" aria-live="polite"></p>
+        <button class="bouton bouton-plein envoyer" type="submit">{textes.messages.envoyerQuestion}</button>
+      </form>
+      {cleTurnstile && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contact { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(32px, 6vw, 80px); align-items: start; }
+  .moyens { display: grid; gap: 30px; }
+  .moyen { border-top: 3px solid var(--ebene); padding-top: 16px; }
+  .moyen .etiquette { margin-bottom: 12px; }
+  .moyen p { margin: 0; }
+  .detail { font: 500 1rem/1.4 var(--f-mono); display: inline-block; margin-top: 12px; }
+
+  .formulaire { background: var(--papier); border-radius: 16px; padding: clamp(22px, 4vw, 40px); display: grid; gap: 22px; }
+  .type { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .type legend { font: 500 0.75rem/1.4 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--brun); margin-bottom: 12px; }
+  .type label {
+    display: flex; gap: 10px; align-items: center; cursor: pointer;
+    font: 600 1rem/1 var(--f-display); padding: 14px 16px; border: 1.5px solid var(--trait); border-radius: var(--rayon); background: #fff;
+  }
+  .type label:has(input:checked) { border-color: var(--olive); background: color-mix(in srgb, var(--olive) 8%, #fff); }
+  .type input { accent-color: var(--olive); width: 18px; height: 18px; }
+
+  .champs { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .champs[hidden] { display: none; }
+  label { display: grid; gap: 8px; font: 600 0.95rem/1.2 var(--f-display); }
+  .requis { color: var(--olive); }
+  .large { grid-column: 1 / -1; }
+  input, select, textarea {
+    font: 400 1rem/1.4 var(--f-texte); color: var(--ebene);
+    padding: 12px 14px; border: 1.5px solid var(--trait); border-radius: var(--rayon); background: #fff; width: 100%;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--olive); box-shadow: 0 0 0 3px color-mix(in srgb, var(--soleil) 45%, transparent); }
+  [aria-invalid="true"] { border-color: #8A5A00; }
+  .accord { display: flex; gap: 12px; align-items: flex-start; font: 400 0.95rem/1.45 var(--f-texte); }
+  .accord input { width: 20px; height: 20px; flex: none; margin-top: 2px; accent-color: var(--olive); }
+  .etat { margin: 0; font-size: 0.98rem; }
+  .etat:empty { display: none; }
+  .etat.erreur { color: #7A4A00; font-weight: 600; }
+  .etat.info { background: var(--sable); padding: 12px 14px; border-radius: var(--rayon); }
+  .envoyer { justify-self: start; }
+
+  @media (max-width: 860px) {
+    .contact { grid-template-columns: 1fr; }
+    .formulaire { order: -1; }
+  }
+  @media (max-width: 560px) { .champs { grid-template-columns: 1fr; } }
+  .piege { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+</style>
+
+<script>
+  const form = document.getElementById("rendez-vous") as HTMLFormElement;
+  const blocRdv = form.querySelector<HTMLElement>(".rdv")!;
+  const envoyer = form.querySelector<HTMLButtonElement>(".envoyer")!;
+  const etat = form.querySelector<HTMLElement>(".etat")!;
+  const m = JSON.parse(form.dataset.messages ?? "{}") as Record<string, string>;
+
+  function majType() {
+    const rdv = (form.elements.namedItem("type") as RadioNodeList).value === "rendez-vous";
+    blocRdv.hidden = !rdv;
+    envoyer.textContent = rdv ? m.envoyerRdv : m.envoyerQuestion;
+  }
+  form.querySelectorAll<HTMLInputElement>('input[name="type"]').forEach((r) => r.addEventListener("change", majType));
+  if (location.hash === "#rendez-vous") {
+    (form.querySelector('input[value="rendez-vous"]') as HTMLInputElement).checked = true;
+  }
+  majType();
+
+  function afficher(classe: "info" | "erreur", texte: string) {
+    etat.className = `etat ${classe}`;
+    etat.textContent = texte;
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    etat.className = "etat";
+    etat.textContent = "";
+    const manquants = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("[required]")].filter((c) =>
+      c.type === "checkbox" ? !(c as HTMLInputElement).checked : !c.value.trim()
+    );
+    form.querySelectorAll("[aria-invalid]").forEach((c) => c.removeAttribute("aria-invalid"));
+    if (manquants.length) {
+      manquants.forEach((c) => c.setAttribute("aria-invalid", "true"));
+      afficher("erreur", m.manquants);
+      manquants[0].focus();
+      return;
+    }
+    envoyer.disabled = true;
+    envoyer.textContent = m.envoi;
+    const turnstile = (window as unknown as { turnstile?: { reset: () => void } }).turnstile;
+    try {
+      const r = await fetch(`${import.meta.env.BASE_URL.replace(/\/$/, "")}/api/contact`, { method: "POST", body: new FormData(form) });
+      if (r.ok) {
+        afficher("info", m.succes);
+        form.reset();
+        majType();
+      } else if (r.status === 404 || r.status === 405) {
+        afficher("info", m.apercu); // Aperçu sans fonctions serveur (GitHub Pages, maquette locale)
+      } else if (r.status === 400) {
+        afficher("erreur", m.incomplet);
+      } else if (r.status === 403) {
+        afficher("erreur", m.antiRobot);
+      } else {
+        throw new Error(String(r.status));
+      }
+    } catch {
+      afficher("erreur", m.erreur);
+    } finally {
+      turnstile?.reset();
+      envoyer.disabled = false;
+      majType();
+    }
+  });
+</script>

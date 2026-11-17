@@ -1,0 +1,81 @@
+{
+  "accueil": "Hello! I'm the assistant of Horizon Comptable Afrique. Choose a topic or ask your question.",
+  "repli": "I don't have a precise answer to that question. The firm can answer you directly: book an appointment or write to us on WhatsApp.",
+  "repliAction": { "libelle": "Contact the firm", "lien": "/en/contact" },
+  "entrees": [
+    {
+      "id": "services",
+      "sujet": "Our services",
+      "mots": ["service", "offer", "what do you do", "what you do", "provide", "help with"],
+      "reponse": "The firm supports SMEs and entrepreneurs with accounting and tax, payroll and HR administration (CNPS), advisory and financial management, audit and review, business set-up, and digitalisation (including the FNE).",
+      "action": { "libelle": "See our services", "lien": "/en/services" }
+    },
+    {
+      "id": "fne",
+      "sujet": "The FNE",
+      "mots": ["fne", "electronic invoice", "e-invoice", "e-invoicing", "standardised invoice", "standardized invoice", "invoicing"],
+      "reponse": "The standardised electronic invoice (FNE) is the system set up by the Directorate General of Taxes (DGI) for issuing invoices. The firm helps you find out whether you are concerned, set up the tool and use it day to day. For your specific case, the best is to talk to us.",
+      "action": { "libelle": "Book an appointment", "lien": "/en/contact#rendez-vous" }
+    },
+    {
+      "id": "conformite",
+      "sujet": "Compliance (DGI, CNPS)",
+      "mots": ["dgi", "cnps", "compliant", "compliance", "obligation", "return", "declaration", "tax filing", "late", "penalt", "fine"],
+      "reponse": "Being compliant means filing your tax returns (DGI) and social security returns (CNPS) on time and paying the amounts due. If you are behind, we first review your situation and regularise it, then take care of your returns going forward.",
+      "action": { "libelle": "Book an appointment", "lien": "/en/contact#rendez-vous" }
+    },
+    {
+      "id": "creation",
+      "sujet": "Setting up a company",
+      "mots": ["set up", "setting up", "start a business", "create", "incorporat", "register", "registration", "sarl", "sole proprietor", "legal structure", "legal form", "steps"],
+      "reponse": "We help you choose the legal structure that suits your project (sole proprietorship, SARL…), prepare the documents and complete the registration and tax declaration formalities. We can then keep your accounts from day one.",
+      "action": { "libelle": "Talk to us", "lien": "/en/contact#rendez-vous" }
+    },
+    {
+      "id": "redressement",
+      "sujet": "Tax audits and reassessments",
+      "mots": ["reassessment", "tax audit", "audit", "inspection", "estimated assessment", "adjustment", "tax inspector"],
+      "reponse": "The best way to avoid a reassessment: regular bookkeeping, accurate returns and well-organised supporting documents. If you receive a notice of tax audit, contact us without delay: we will prepare the file with you.",
+      "action": { "libelle": "Book an appointment", "lien": "/en/contact#rendez-vous" }
+    },
+    {
+      "id": "tarifs",
+      "sujet": "Fees",
+      "mots": ["price", "fee", "cost", "how much", "rate", "affordable", "expensive", "budget", "charge"],
+      "reponse": "Our fees depend on the size of your business and the work entrusted to us. We offer packages suited to small businesses and entrepreneurs. Tell us about your business and we will send you a clear proposal.",
+      "action": { "libelle": "Request a proposal", "lien": "/en/contact" }
+    },
+    {
+      "id": "paie",
+      "sujet": "Payroll and CNPS",
+      "mots": ["payroll", "salary", "salaries", "payslip", "employee", "staff", "contribution", "wages"],
+      "reponse": "We prepare your payslips, calculate contributions and file your returns with the CNPS. You stay on top of your employer obligations without spending your evenings on them.",
+      "action": { "libelle": "See our services", "lien": "/en/services" }
+    },
+    {
+      "id": "syscohada",
+      "sujet": "SYSCOHADA",
+      "mots": ["syscohada", "ohada", "standard", "accounting framework", "chart of accounts"],
+      "reponse": "SYSCOHADA is the accounting framework shared by the OHADA countries, including Côte d'Ivoire. The firm keeps your accounts and prepares your financial statements in accordance with it."
+    },
+    {
+      "id": "rendezvous",
+      "sujet": "Book an appointment",
+      "mots": ["appointment", "meeting", "meet", "book", "contact", "reach", "call", "phone", "whatsapp"],
+      "reponse": "You can request an appointment from the Contact page or write to us directly on WhatsApp. We will get back to you quickly to set a time.",
+      "action": { "libelle": "Request an appointment", "lien": "/en/contact#rendez-vous" }
+    },
+    {
+      "id": "zone",
+      "sujet": "Where are you?",
+      "mots": ["where are you", "address", "located", "location", "abidjan", "city", "remote", "distance"],
+      "reponse": "The firm is based in Abidjan and supports businesses throughout Côte d'Ivoire, in person or remotely."
+    },
+    {
+      "id": "confidentialite",
+      "sujet": "Confidentiality",
+      "mots": ["confidential", "privacy", "secret", "secure", "security", "data", "discretion"],
+      "reponse": "Your documents and figures are treated as strictly confidential: they are used only for your file and never leave the firm."
+    }
+  ]
+}

@@ -1,5 +1,10 @@
 ---
-import { cabinet, navigation, lienWhatsApp, lien } from "../config";
+import { cabinet, lienWhatsApp, lien } from "../config";
+import { ui, url, menu, type Langue } from "../i18n";
+
+interface Props { langue: Langue }
+const { langue } = Astro.props;
+const t = ui[langue];
 const annee = new Date().getFullYear();
 ---
 <footer class="pied">
@@ -9,31 +14,31 @@ const annee = new Date().getFullYear();
         <img src={lien("/img/embleme-hca.png")} alt="" width="64" height="53" />
         <div>
           <p class="nom">Horizon Comptable Afrique</p>
-          <p class="sous">Votre partenaire de confiance en comptabilité</p>
+          <p class="sous">{t.signature}</p>
         </div>
       </div>
-      <p class="resume">Comptabilité, fiscalité, paie et conseil financier pour les PME et les entrepreneurs de Côte d'Ivoire.</p>
+      <p class="resume">{t.resume}</p>
     </div>
 
     <div>
-      <p class="etiquette">Nous joindre</p>
+      <p class="etiquette">{t.nousJoindre}</p>
       <ul>
         <li>{cabinet.ville}</li>
-        <li><a href={lienWhatsApp()} class={cabinet.numeroProvisoire ? "provisoire" : undefined}>WhatsApp : {cabinet.telephone}</a></li>
+        <li><a href={lienWhatsApp(t.messageWhatsApp)} class={cabinet.numeroProvisoire ? "provisoire" : undefined}>WhatsApp{langue === "fr" ? " :" : ":"} {cabinet.telephone}</a></li>
         <li><a href={`mailto:${cabinet.email}`}>{cabinet.email}</a></li>
       </ul>
     </div>
 
     <div>
-      <p class="etiquette">Le site</p>
+      <p class="etiquette">{t.leSite}</p>
       <ul>
-        {navigation.map((l) => <li><a href={lien(l.href)}>{l.label}</a></li>)}
-        <li><a href={lien("/mentions-legales")}>Mentions légales</a></li>
+        {menu.map((p) => <li><a href={url(p, langue)}>{t.nav[p]}</a></li>)}
+        <li><a href={url("legal", langue)}>{t.nav.legal}</a></li>
       </ul>
     </div>
 
     <div>
-      <p class="etiquette">Nous suivre</p>
+      <p class="etiquette">{t.nousSuivre}</p>
       <ul>
         <li><a href={cabinet.linkedin}>LinkedIn</a></li>
         <li><a href={cabinet.facebook}>Facebook</a></li>

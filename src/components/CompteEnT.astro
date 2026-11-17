@@ -2,13 +2,39 @@
 // Signature du site : un compte en T dont la barre horizontale est la ligne d'horizon.
 // À gauche (débit) ce qui pèse sur les entreprises, à droite (crédit) ce que le cabinet règle.
 // Contenu tiré de l'entretien avec M. Gnan (difficultés de ses clients) et de son texte d'ambition.
-const lignes = [
-  { peine: "Des pénalités pour déclarations en retard", reponse: "Vos déclarations DGI et CNPS déposées dans les délais" },
-  { peine: "La crainte d'un redressement ou d'une taxation d'office", reponse: "Un dossier fiscal tenu, prêt pour un contrôle" },
-  { peine: "Une comptabilité confiée à un prestataire peu fiable", reponse: "Une comptabilité régulière, conforme au SYSCOHADA" },
-  { peine: "Une trésorerie et une rentabilité difficiles à lire", reponse: "Des chiffres clairs pour décider et maîtriser vos charges" },
-  { peine: "La FNE et les logiciels comptables qui compliquent tout", reponse: "Des outils de gestion mis en place et maîtrisés" },
-];
+import type { Langue } from "../i18n";
+interface Props { langue: Langue }
+const { langue } = Astro.props;
+
+const textes = {
+  fr: {
+    aria: "Ce qui vous pèse, et ce que nous réglons",
+    debit: "Débit", peines: "Ce qui vous pèse",
+    credit: "Crédit", reponses: "Ce que nous réglons",
+    solde: "Solde", conclusion: "Une entreprise en règle, qui avance.",
+    lignes: [
+      { peine: "Des pénalités pour déclarations en retard", reponse: "Vos déclarations DGI et CNPS déposées dans les délais" },
+      { peine: "La crainte d'un redressement ou d'une taxation d'office", reponse: "Un dossier fiscal tenu, prêt pour un contrôle" },
+      { peine: "Une comptabilité confiée à un prestataire peu fiable", reponse: "Une comptabilité régulière, conforme au SYSCOHADA" },
+      { peine: "Une trésorerie et une rentabilité difficiles à lire", reponse: "Des chiffres clairs pour décider et maîtriser vos charges" },
+      { peine: "La FNE et les logiciels comptables qui compliquent tout", reponse: "Des outils de gestion mis en place et maîtrisés" },
+    ],
+  },
+  en: {
+    aria: "What weighs on you, and what we resolve",
+    debit: "Debit", peines: "What weighs on you",
+    credit: "Credit", reponses: "What we resolve",
+    solde: "Balance", conclusion: "A business in good standing, moving forward.",
+    lignes: [
+      { peine: "Penalties for late tax and social security returns", reponse: "Your DGI and CNPS returns filed on time" },
+      { peine: "The fear of a tax reassessment or an estimated assessment", reponse: "A well-kept tax file, ready for an audit" },
+      { peine: "Accounts entrusted to an unreliable provider", reponse: "Regular bookkeeping that complies with SYSCOHADA" },
+      { peine: "Cash flow and profitability that are hard to read", reponse: "Clear figures to make decisions and control your costs" },
+      { peine: "The FNE and accounting software that complicate everything", reponse: "Management tools set up and mastered" },
+    ],
+  },
+}[langue];
+const lignes = textes.lignes;
 
 const rayons = Array.from({ length: 9 }, (_, i) => {
   const angle = Math.PI - (Math.PI * (i + 1)) / 10;
@@ -19,7 +45,7 @@ const rayons = Array.from({ length: 9 }, (_, i) => {
   };
 });
 ---
-<figure class="compte" aria-label="Ce qui vous pèse, et ce que nous réglons">
+<figure class="compte" aria-label={textes.aria}>
   <div class="horizon" aria-hidden="true">
     <svg class="soleil" viewBox="0 0 200 118" preserveAspectRatio="xMidYMax meet">
       <g class="rayons">
@@ -30,8 +56,8 @@ const rayons = Array.from({ length: 9 }, (_, i) => {
   </div>
 
   <div class="tetes">
-    <p><span class="etiquette">Débit</span> Ce qui vous pèse</p>
-    <p><span class="etiquette">Crédit</span> Ce que nous réglons</p>
+    <p><span class="etiquette">{textes.debit}</span> {textes.peines}</p>
+    <p><span class="etiquette">{textes.credit}</span> {textes.reponses}</p>
   </div>
 
   <ul class="lignes">
@@ -47,8 +73,8 @@ const rayons = Array.from({ length: 9 }, (_, i) => {
   </ul>
 
   <figcaption class="solde">
-    <span class="etiquette">Solde</span>
-    <strong>Une entreprise en règle, qui avance.</strong>
+    <span class="etiquette">{textes.solde}</span>
+    <strong>{textes.conclusion}</strong>
   </figcaption>
 </figure>
 <script is:inline>

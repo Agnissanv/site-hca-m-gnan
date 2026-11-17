@@ -32,9 +32,4 @@ export const lien = (chemin: string) => (/^(https?:|mailto:|tel:|#)/.test(chemin
 export const lienWhatsApp = (message = "Bonjour, je souhaite échanger avec le cabinet Horizon Comptable Afrique.") =>
   `https://wa.me/${cabinet.whatsapp}?text=${encodeURIComponent(message)}`;
 
-export const navigation = [
-  { href: "/", label: "Accueil" },
-  { href: "/a-propos", label: "Le cabinet" },
-  { href: "/services", label: "Services" },
-  { href: "/contact", label: "Contact" },
-];
+// Le menu et les adresses des pages (français / anglais) sont dans src/i18n.ts.

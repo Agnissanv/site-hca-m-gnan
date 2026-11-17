@@ -1,10 +1,14 @@
 ---
-import { navigation, lien } from "../config";
-const chemin = Astro.url.pathname.replace(/\/$/, "") || "/";
+import { lien, cabinet, lienWhatsApp } from "../config";
+import { ui, url, menu, langues, type Langue, type Page } from "../i18n";
+
+interface Props { langue: Langue; page: Page }
+const { langue, page } = Astro.props;
+const t = ui[langue];
 ---
 <header class="entete">
   <div class="conteneur barre">
-    <a class="marque" href={lien("/")} aria-label="Horizon Comptable Afrique, accueil">
+    <a class="marque" href={url("accueil", langue)} aria-label={t.accueilAria}>
       <img src={lien("/img/embleme-hca.png")} alt="" width="58" height="48" />
       <span class="nom">
         <span class="nom-principal">Horizon</span>
@@ -12,18 +16,39 @@ const chemin = Astro.url.pathname.replace(/\/$/, "") || "/";
       </span>
     </a>
 
-    <button class="bascule" type="button" aria-expanded="false" aria-controls="menu-principal">
-      <span class="visuellement-cache">Ouvrir le menu</span>
-      <span class="trait-menu" aria-hidden="true"></span>
+    <button class="bascule" type="button" aria-expanded="false" aria-controls="menu-principal" data-ouvrir={t.ouvrirMenu} data-fermer={t.fermerMenu}>
+      <span class="visuellement-cache libelle-bascule">{t.ouvrirMenu}</span>
+      <span class="traits" aria-hidden="true"></span>
     </button>
 
-    <nav id="menu-principal" class="menu" aria-label="Navigation principale">
+    <nav id="menu-principal" class="menu" aria-label={t.navAria}>
       <ul>
-        {navigation.map((l) => (
-          <li><a href={lien(l.href)} aria-current={chemin === (lien(l.href).replace(/\/$/, "") || "/") ? "page" : undefined}>{l.label}</a></li>
+        {menu.map((p, i) => (
+          <li style={`--i:${i}`}>
+            <a href={url(p, langue)} aria-current={p === page ? "page" : undefined}>
+              <span class="libelle">{t.nav[p]}</span>
+            </a>
+          </li>
         ))}
       </ul>
-      <a class="bouton bouton-plein" href={lien("/contact#rendez-vous")}>Prendre rendez-vous</a>
+
+      <div class="langues" role="group" aria-label={t.langueAria} style={`--i:${menu.length}`}>
+        {langues.map((l) =>
+          l === langue
+            ? <span class="langue-active" lang={l} aria-current="true">{l.toUpperCase()}</span>
+            : <a href={url(page, l)} hreflang={l} lang={l}>{l.toUpperCase()}</a>
+        )}
+      </div>
+
+      <a class="bouton bouton-plein" style={`--i:${menu.length + 1}`} href={url("contact", langue, "#rendez-vous")}>{t.rdv}</a>
+
+      <!-- Visible uniquement dans le menu mobile ouvert -->
+      <div class="menu-coordonnees" style={`--i:${menu.length + 2}`}>
+        <p class="etiquette">{t.nousJoindre}</p>
+        <a href={lienWhatsApp(t.messageWhatsApp)} target="_blank" rel="noopener">WhatsApp · {cabinet.telephone}</a>
+        <a href={`mailto:${cabinet.email}`}>{cabinet.email}</a>
+        <p>{cabinet.ville}</p>
+      </div>
     </nav>
   </div>
 </header>
@@ -34,6 +59,7 @@ const chemin = Astro.url.pathname.replace(/\/$/, "") || "/";
      --p va de 0 (haut de page) à 1 (après 120 px), calculé par le script plus bas. */
   .entete {
     --p: 0;
+    --courbe: cubic-bezier(.22, .61, .36, 1);
     position: sticky; top: 0; z-index: 40;
     isolation: isolate;
   }
@@ -48,12 +74,13 @@ const chemin = Astro.url.pathname.replace(/\/$/, "") || "/";
   }
   .entete::after { bottom: 0; height: 1px; background: var(--trait); }
   .barre { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 76px; }
-  .marque { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--brun); }
+  .marque { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--brun); position: relative; z-index: 2; }
   .marque img { width: 58px; height: auto; }
   .nom { display: grid; line-height: 1; }
   .nom-principal { font: 780 1.45rem/1 var(--f-display); font-stretch: 82%; letter-spacing: 0.06em; text-transform: uppercase; }
   .nom-secondaire { font: 500 0.66rem/1.4 var(--f-mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--ebene); margin-top: 3px; }
 
+  /* ---- Ordinateur : menu en ligne ---- */
   .menu { display: flex; align-items: center; gap: 28px; }
   .menu ul { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; }
   .menu ul a { font: 560 1rem/1 var(--f-display); text-decoration: none; padding: 8px 0; border-bottom: 2px solid transparent; }
@@ -61,12 +88,21 @@ const chemin = Astro.url.pathname.replace(/\/$/, "") || "/";
   .menu ul a:hover { color: var(--olive); }
   /* Bouton de l'en-tête plus compact que ceux du contenu */
   .menu .bouton { padding: 11px 20px; font-size: 0.95rem; }
+  .menu-coordonnees { display: none; }
+
+  /* Sélecteur de langue : FR / EN */
+  .langues { display: flex; align-items: center; gap: 7px; font: 500 0.78rem/1 var(--f-mono); letter-spacing: 0.1em; }
+  .langues > * + *::before { content: "/"; margin-right: 7px; opacity: 0.35; }
+  .langues a { text-decoration: none; opacity: 0.62; transition: opacity .2s; }
+  .langues a:hover, .langues a:focus-visible { opacity: 1; }
+  .langue-active { font-weight: 600; }
 
   /* Page qui s'ouvre sur une photo (accueil) : les couleurs glissent en continu du clair (sur la photo)
      au foncé (sur le fond sable), en suivant --p ; pas de bascule brutale. */
   :global(body.avec-photo) .entete .marque { color: color-mix(in srgb, var(--brun) calc(var(--p) * 100%), var(--papier)); }
   :global(body.avec-photo) .entete .nom-secondaire { color: color-mix(in srgb, var(--ebene) calc(var(--p) * 100%), var(--sable-fonce)); }
-  :global(body.avec-photo) .entete .menu ul a { color: color-mix(in srgb, var(--ebene) calc(var(--p) * 100%), var(--papier)); }
+  :global(body.avec-photo) .entete .menu ul a,
+  :global(body.avec-photo) .entete .langues { color: color-mix(in srgb, var(--ebene) calc(var(--p) * 100%), var(--papier)); }
   :global(body.avec-photo) .entete .menu ul a:hover { color: color-mix(in srgb, var(--olive) calc(var(--p) * 100%), var(--soleil)); }
   :global(body.avec-photo) .entete .menu .bouton {
     background: color-mix(in srgb, var(--ebene) calc(var(--p) * 100%), var(--sable));
@@ -76,42 +112,107 @@ const chemin = Astro.url.pathname.replace(/\/$/, "") || "/";
     background: color-mix(in srgb, var(--brun) calc(var(--p) * 100%), var(--papier));
     color: color-mix(in srgb, var(--papier) calc(var(--p) * 100%), var(--ebene));
   }
+  :global(body.avec-photo) .entete .bascule { color: color-mix(in srgb, var(--ebene) calc(var(--p) * 100%), var(--papier)); }
 
   .bascule { display: none; }
 
+  /* ---- Téléphone et tablette : bouton burger + menu plein écran ---- */
   @media (max-width: 900px) {
+    /* Burger : deux traits fins de longueurs différentes, qui se croisent en « × » */
     .bascule {
-      display: grid; place-items: center;
-      width: 46px; height: 46px; border: 1px solid var(--trait); border-radius: var(--rayon);
-      background: var(--papier); cursor: pointer;
+      display: inline-grid; place-items: center;
+      position: relative; z-index: 2;
+      width: 46px; height: 46px; margin-right: -10px;
+      border: 0; border-radius: 999px; background: transparent; color: var(--ebene);
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
     }
-    .trait-menu, .trait-menu::before, .trait-menu::after {
-      display: block; width: 20px; height: 2px; background: var(--ebene); position: relative; transition: transform .2s, background .2s;
+    .traits { position: relative; display: block; width: 26px; height: 12px; }
+    .traits::before, .traits::after {
+      content: ""; position: absolute; right: 0; height: 2px; border-radius: 2px; background: currentColor;
+      transition: top .45s var(--courbe), width .45s var(--courbe), transform .45s var(--courbe);
     }
-    .trait-menu::before, .trait-menu::after { content: ""; position: absolute; left: 0; }
-    .trait-menu::before { top: -6px; }
-    .trait-menu::after { top: 6px; }
-    .bascule[aria-expanded="true"] .trait-menu { background: transparent; }
-    .bascule[aria-expanded="true"] .trait-menu::before { transform: translateY(6px) rotate(45deg); }
-    .bascule[aria-expanded="true"] .trait-menu::after { transform: translateY(-6px) rotate(-45deg); }
+    .traits::before { top: 0; width: 26px; }
+    .traits::after { top: 10px; width: 17px; }
+    .bascule[aria-expanded="true"] .traits::before { top: 5px; width: 24px; transform: rotate(45deg); }
+    .bascule[aria-expanded="true"] .traits::after { top: 5px; width: 24px; transform: rotate(-45deg); }
 
+    /* Panneau plein écran : fondu + léger glissement à l'ouverture comme à la fermeture */
     .menu {
-      position: absolute; inset: 76px 0 auto 0;
-      flex-direction: column; align-items: stretch; gap: 18px;
-      padding: 20px var(--gouttiere) 28px;
-      background: var(--sable); border-bottom: 1px solid var(--trait);
-      display: none;
+      position: fixed; inset: 0; z-index: 1;
+      display: flex; flex-direction: column; align-items: stretch; gap: 0;
+      padding: calc(var(--hauteur-entete) + 12px) var(--gouttiere) max(28px, env(safe-area-inset-bottom));
+      background: var(--sable);
+      overflow-y: auto; overscroll-behavior: contain;
+      opacity: 0; visibility: hidden; transform: translateY(-12px);
+      transition: opacity .35s var(--courbe), transform .45s var(--courbe), visibility 0s linear .45s;
     }
-    .menu.ouvert { display: flex; }
-    .menu ul { flex-direction: column; gap: 4px; }
-    .menu ul a { display: block; font-size: 1.3rem; padding: 10px 0; }
-    .menu .bouton { justify-content: center; }
+    .menu.ouvert {
+      opacity: 1; visibility: visible; transform: none;
+      transition: opacity .4s var(--courbe), transform .5s var(--courbe), visibility 0s;
+    }
+
+    /* Les liens, comme les lignes d'un registre : grands, séparés par un trait fin */
+    .menu ul { flex-direction: column; gap: 0; border-top: 1px solid var(--trait); }
+    .menu ul li { border-bottom: 1px solid var(--trait); }
+    .menu ul a {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 20px 2px; border-bottom: 0;
+      font: 720 clamp(1.85rem, 8.5vw, 2.4rem)/1.05 var(--f-display); font-stretch: 86%; letter-spacing: -0.015em;
+      color: var(--ebene);
+    }
+    .menu ul a::after {
+      content: "→"; font: 500 1.15rem/1 var(--f-display); color: var(--brun-doux);
+      transition: transform .3s var(--courbe), color .3s;
+    }
+    .menu ul a:hover::after, .menu ul a:focus-visible::after { transform: translateX(4px); color: var(--olive); }
+    .menu ul a[aria-current="page"] { color: var(--brun); }
+    .menu ul a[aria-current="page"] .libelle {
+      background: linear-gradient(var(--soleil), var(--soleil)) no-repeat 0 100% / 100% 3px;
+      padding-bottom: 4px;
+    }
+
+    .langues { margin-top: 24px; font-size: 0.95rem; gap: 10px; color: var(--ebene); }
+    .langues > * + *::before { margin-right: 10px; }
+
+    .menu .bouton { margin-top: 24px; padding: 17px 24px; font-size: 1.02rem; justify-content: center; }
+
+    .menu-coordonnees {
+      display: grid; gap: 8px; margin-top: auto; padding-top: 36px;
+      font: 400 0.98rem/1.4 var(--f-texte); color: var(--brun);
+    }
+    .menu-coordonnees .etiquette { margin: 0 0 4px; }
+    .menu-coordonnees a { text-decoration: none; width: fit-content; }
+    .menu-coordonnees a:hover { color: var(--olive); }
+    .menu-coordonnees p { margin: 0; }
+
+    /* Arrivée des éléments l'un après l'autre */
+    .menu ul li, .menu .langues, .menu .bouton, .menu-coordonnees {
+      opacity: 0; transform: translateY(14px);
+      transition: opacity .3s ease, transform .3s var(--courbe);
+    }
+    .menu.ouvert ul li, .menu.ouvert .langues, .menu.ouvert .bouton, .menu.ouvert .menu-coordonnees {
+      opacity: 1; transform: none;
+      transition: opacity .5s ease, transform .6s var(--courbe), background-color .25s, color .25s;
+      transition-delay: calc(90ms + var(--i) * 55ms);
+    }
+
+    /* Sur la photo de l'accueil, le contenu du menu ouvert garde les couleurs du fond sable */
+    :global(body.avec-photo) .entete .menu ul a,
+    :global(body.avec-photo) .entete .langues { color: var(--ebene); }
+    :global(body.avec-photo) .entete .menu ul a[aria-current="page"] { color: var(--brun); }
+    :global(body.avec-photo) .entete .menu .bouton { background: var(--ebene); color: var(--sable); }
   }
+
+  /* Menu ouvert : la page derrière ne défile plus, les boutons flottants s'effacent */
+  :global(html.menu-ouvert) { overflow: hidden; }
+  :global(html.menu-ouvert .flottants) { opacity: 0; pointer-events: none; }
+  :global(.flottants) { transition: opacity .3s ease; }
 </style>
 
 <script>
   const entete = document.querySelector<HTMLElement>(".entete");
   const bouton = document.querySelector<HTMLButtonElement>(".bascule");
+  const libelle = document.querySelector<HTMLElement>(".libelle-bascule");
   const menu = document.getElementById("menu-principal");
   const DISTANCE_FONDU = 120; // px de défilement pour que l'en-tête soit entièrement opaque
 
@@ -130,10 +231,30 @@ const chemin = Astro.url.pathname.replace(/\/$/, "") || "/";
   }, { passive: true });
   majEntete();
 
-  bouton?.addEventListener("click", () => {
-    const ouvert = bouton.getAttribute("aria-expanded") === "true";
-    bouton.setAttribute("aria-expanded", String(!ouvert));
-    menu?.classList.toggle("ouvert", !ouvert);
+  // Menu mobile : ouverture, fermeture, page figée derrière, contenu de la page rendu inactif
+  const arrierePlan = () => [document.getElementById("contenu"), document.querySelector(".pied"), document.querySelector(".flottants")];
+  function basculerMenu(ouvrir: boolean, rendreFocus = false) {
+    if (!bouton || !menu) return;
+    bouton.setAttribute("aria-expanded", String(ouvrir));
+    if (libelle) libelle.textContent = (ouvrir ? bouton.dataset.fermer : bouton.dataset.ouvrir) ?? "";
+    menu.classList.toggle("ouvert", ouvrir);
+    document.documentElement.classList.toggle("menu-ouvert", ouvrir);
+    arrierePlan().forEach((el) => { if (el) (el as HTMLElement).inert = ouvrir; });
     majEntete();
+    if (ouvrir) setTimeout(() => menu.querySelector<HTMLElement>("ul a")?.focus({ preventScroll: true }), 120);
+    else if (rendreFocus) bouton.focus();
+  }
+
+  bouton?.addEventListener("click", () => basculerMenu(bouton.getAttribute("aria-expanded") !== "true"));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && menu?.classList.contains("ouvert")) basculerMenu(false, true);
+  });
+  // Un lien vers une ancre de la même page (ex. #rendez-vous) referme le menu
+  menu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => {
+    if (menu.classList.contains("ouvert")) basculerMenu(false);
+  }));
+  // Passage en largeur ordinateur : le menu mobile se referme
+  window.matchMedia("(min-width: 901px)").addEventListener("change", (e) => {
+    if (e.matches && menu?.classList.contains("ouvert")) basculerMenu(false);
   });
 </script>

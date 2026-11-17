@@ -1,79 +1,196 @@
 {
   "accueil": "Bonjour ! Je suis l'assistant du cabinet Horizon Comptable Afrique. Choisissez un sujet ou posez votre question.",
   "repli": "Je n'ai pas de réponse précise à cette question. Le cabinet peut vous répondre directement : prenez rendez-vous ou écrivez-nous sur WhatsApp.",
+  "repliAction": {
+    "libelle": "Contacter le cabinet",
+    "lien": "/contact"
+  },
   "entrees": [
     {
       "id": "services",
       "sujet": "Nos services",
-      "mots": ["service", "prestation", "que faites", "proposez", "mission", "offre"],
+      "mots": [
+        "service",
+        "prestation",
+        "que faites",
+        "proposez",
+        "mission",
+        "offre"
+      ],
       "reponse": "Le cabinet accompagne les PME et les entrepreneurs en comptabilité et fiscalité, paie et gestion sociale (CNPS), conseil et gestion financière, audit et contrôle, création d'entreprise, et digitalisation (dont la FNE).",
-      "action": { "libelle": "Voir les services", "lien": "/services" }
+      "action": {
+        "libelle": "Voir les services",
+        "lien": "/services"
+      }
     },
     {
       "id": "fne",
       "sujet": "La FNE",
-      "mots": ["fne", "facture normalisee", "facture electronique", "facturation electronique", "normalisee"],
+      "mots": [
+        "fne",
+        "facture normalisee",
+        "facture electronique",
+        "facturation electronique",
+        "normalisee"
+      ],
       "reponse": "La facture normalisée électronique (FNE) est le dispositif de la Direction Générale des Impôts pour l'émission des factures. Le cabinet vous aide à savoir si vous êtes concerné, à mettre l'outil en place et à l'utiliser au quotidien. Pour votre cas précis, le mieux est d'en parler avec nous.",
-      "action": { "libelle": "Prendre rendez-vous", "lien": "/contact#rendez-vous" }
+      "action": {
+        "libelle": "Prendre rendez-vous",
+        "lien": "/contact#rendez-vous"
+      }
     },
     {
       "id": "conformite",
       "sujet": "Être en règle (DGI, CNPS)",
-      "mots": ["dgi", "cnps", "en regle", "conformite", "conforme", "obligation", "declaration", "impot", "retard", "penalite"],
+      "mots": [
+        "dgi",
+        "cnps",
+        "en regle",
+        "conformite",
+        "conforme",
+        "obligation",
+        "declaration",
+        "impot",
+        "retard",
+        "penalite"
+      ],
       "reponse": "Être en règle, c'est déposer vos déclarations fiscales (DGI) et sociales (CNPS) dans les délais et régler les sommes dues. Si vous avez du retard, nous faisons d'abord un état des lieux et régularisons votre situation, puis nous prenons en charge vos déclarations au fil des mois.",
-      "action": { "libelle": "Prendre rendez-vous", "lien": "/contact#rendez-vous" }
+      "action": {
+        "libelle": "Prendre rendez-vous",
+        "lien": "/contact#rendez-vous"
+      }
     },
     {
       "id": "creation",
       "sujet": "Créer mon entreprise",
-      "mots": ["creer", "creation", "immatricul", "sarl", "entreprise individuelle", "statut", "forme juridique", "demarche"],
+      "mots": [
+        "creer",
+        "creation",
+        "immatricul",
+        "sarl",
+        "entreprise individuelle",
+        "statut",
+        "forme juridique",
+        "demarche"
+      ],
       "reponse": "Nous vous aidons à choisir la forme juridique adaptée à votre projet (entreprise individuelle, SARL…), à préparer les documents et à accomplir les formalités d'immatriculation et de déclaration fiscale. Ensuite, nous pouvons tenir votre comptabilité dès le premier jour.",
-      "action": { "libelle": "En parler avec nous", "lien": "/contact#rendez-vous" }
+      "action": {
+        "libelle": "En parler avec nous",
+        "lien": "/contact#rendez-vous"
+      }
     },
     {
       "id": "redressement",
       "sujet": "Contrôle et redressement",
-      "mots": ["redressement", "controle fiscal", "verification", "taxation d'office", "taxation", "controle"],
+      "mots": [
+        "redressement",
+        "controle fiscal",
+        "verification",
+        "taxation d'office",
+        "taxation",
+        "controle"
+      ],
       "reponse": "Le meilleur moyen d'éviter un redressement : une comptabilité régulière, des déclarations exactes et des pièces justificatives bien classées. Si vous recevez un avis de vérification, contactez-nous sans attendre : nous préparons le dossier avec vous.",
-      "action": { "libelle": "Prendre rendez-vous", "lien": "/contact#rendez-vous" }
+      "action": {
+        "libelle": "Prendre rendez-vous",
+        "lien": "/contact#rendez-vous"
+      }
     },
     {
       "id": "tarifs",
       "sujet": "Tarifs",
-      "mots": ["prix", "tarif", "cout", "combien", "honoraire", "abordable", "accessible", "cher", "budget"],
+      "mots": [
+        "prix",
+        "tarif",
+        "cout",
+        "combien",
+        "honoraire",
+        "abordable",
+        "accessible",
+        "cher",
+        "budget"
+      ],
       "reponse": "Nos honoraires dépendent de la taille de votre entreprise et des missions confiées. Nous proposons des formules adaptées aux petites entreprises et aux entrepreneurs. Décrivez-nous votre activité : nous vous ferons une proposition claire.",
-      "action": { "libelle": "Demander une proposition", "lien": "/contact" }
+      "action": {
+        "libelle": "Demander une proposition",
+        "lien": "/contact"
+      }
     },
     {
       "id": "paie",
       "sujet": "Paie et CNPS",
-      "mots": ["paie", "salaire", "bulletin", "employe", "salarie", "cotisation", "personnel"],
+      "mots": [
+        "paie",
+        "salaire",
+        "bulletin",
+        "employe",
+        "salarie",
+        "cotisation",
+        "personnel"
+      ],
       "reponse": "Nous établissons vos bulletins de paie, calculons les cotisations et effectuons vos déclarations à la CNPS. Vous restez à jour de vos obligations d'employeur, sans y passer vos soirées.",
-      "action": { "libelle": "Voir les services", "lien": "/services" }
+      "action": {
+        "libelle": "Voir les services",
+        "lien": "/services"
+      }
     },
     {
       "id": "syscohada",
       "sujet": "Le SYSCOHADA",
-      "mots": ["syscohada", "ohada", "norme", "referentiel", "plan comptable"],
+      "mots": [
+        "syscohada",
+        "ohada",
+        "norme",
+        "referentiel",
+        "plan comptable"
+      ],
       "reponse": "Le SYSCOHADA est le référentiel comptable commun aux pays de l'OHADA, dont la Côte d'Ivoire. Le cabinet tient votre comptabilité et prépare vos états financiers selon ce référentiel."
     },
     {
       "id": "rendezvous",
       "sujet": "Prendre rendez-vous",
-      "mots": ["rendez-vous", "rendez vous", "rdv", "rencontrer", "contacter", "joindre", "appeler", "telephone", "whatsapp"],
+      "mots": [
+        "rendez-vous",
+        "rendez vous",
+        "rdv",
+        "rencontrer",
+        "contacter",
+        "joindre",
+        "appeler",
+        "telephone",
+        "whatsapp"
+      ],
       "reponse": "Vous pouvez demander un rendez-vous depuis la page Contact ou nous écrire directement sur WhatsApp. Nous revenons vers vous rapidement pour fixer un créneau.",
-      "action": { "libelle": "Demander un rendez-vous", "lien": "/contact#rendez-vous" }
+      "action": {
+        "libelle": "Demander un rendez-vous",
+        "lien": "/contact#rendez-vous"
+      }
     },
     {
       "id": "zone",
       "sujet": "Où êtes-vous ?",
-      "mots": ["ou etes", "adresse", "situe", "abidjan", "ville", "distance", "interieur", "localisation"],
+      "mots": [
+        "ou etes",
+        "adresse",
+        "situe",
+        "abidjan",
+        "ville",
+        "distance",
+        "interieur",
+        "localisation"
+      ],
       "reponse": "Le cabinet est basé à Abidjan et accompagne des entreprises dans toute la Côte d'Ivoire, en rendez-vous comme à distance."
     },
     {
       "id": "confidentialite",
       "sujet": "Confidentialité",
-      "mots": ["confidentiel", "secret", "securite", "donnees", "discretion"],
+      "mots": [
+        "confidentiel",
+        "secret",
+        "securite",
+        "donnees",
+        "discretion"
+      ],
       "reponse": "Vos documents et vos chiffres sont traités de manière strictement confidentielle : ils ne servent qu'à votre dossier et ne sortent pas du cabinet."
     }
   ]
